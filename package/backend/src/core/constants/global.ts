@@ -1,5 +1,3 @@
-import { ConstantsCountries } from './countries';
-
 export const UPLOAD_MAX_ALLOWED_FILES = 25;
 export const UPLOAD_MAX_ALLOWED_FILES_SIZE = 10;
 
@@ -18,13 +16,12 @@ export namespace App {
     export const VERIFICATION_CODE_EXPIRED_MINUTES = 5;
 
     export enum USER_INTERFACE_LANGUAGES {
+        dk = 'dk',
         el = 'el',
         en = 'en',
-        es = 'es',
         it = 'it',
-        nb = 'nb',
+        nb = 'pt',
         pl = 'pl',
-        sl = 'sl',
         sv = 'sv',
     }
 }

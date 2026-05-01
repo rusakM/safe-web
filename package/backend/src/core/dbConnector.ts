@@ -1,4 +1,4 @@
-import { Model, Document, FilterQuery, Types } from 'mongoose';
+import { Model, Document, QueryFilter, Types } from 'mongoose';
 import { RedisConnector } from './redisConnector';
 import * as SchemasGlobal from '../models/globalSchemas';
 
@@ -90,7 +90,7 @@ interface IFindMethods<IModel, TIndexes extends string> {
      * @param limit - Optional limit on the number of documents to return.
      * @returns An array of matching documents.
      */
-    byQuery: (conditions: FilterQuery<IModel>, limit?: number) => Promise<IModel[]>;
+    byQuery: (conditions: QueryFilter<IModel>, limit?: number) => Promise<IModel[]>;
 
     /**
      * Finds documents within a specified date range.
@@ -136,163 +136,165 @@ interface IAdditionalMethods<TIndexes extends string> {
 }
 
 export class DbConnector<IDBModel extends Document, IModel extends SchemasGlobal.Schemas.IDocument, TIndexes extends string> implements IDbConnector<IModel, TIndexes> {
-  protected Model: Model<IDBModel>;
-  protected errorMsg: string;
+    protected Model: Model<IDBModel>;
+    protected errorMsg: string;
 
-  constructor(ModelDB: Model<IDBModel>) {
-    this.Model = ModelDB;
-    this.errorMsg = `Error db (collection: ${this.Model.collection.name}) - `;
-  }
-
-  async create(payload: IModel): Promise<IModel | null> {
-    try {
-      return (await this.Model.create(payload)) as unknown as IModel;
-    } catch (error) {
-      console.log(`${this.errorMsg} payload: `, JSON.stringify(payload));
-      console.error(`${this.errorMsg} creating item:`, error);
-      return null;
+    public constructor(ModelDB: Model<IDBModel>) {
+        this.Model = ModelDB;
+        this.errorMsg = `Error db (collection: ${this.Model.collection.name}) - `;
     }
-  }
 
-  async createMany(payload: IModel[]): Promise<IModel[] | null> {
-    try {
-      return (await this.Model.insertMany(payload)) as unknown as IModel[];
-    } catch (error) {
-      console.log(`${this.errorMsg} payload: `, JSON.stringify(payload));
-      console.error(`${this.errorMsg} creating item:`, error);
-      return null;
+    public async create(payload: IModel): Promise<IModel | null> {
+        try {
+            //@ts-ignore
+            return (await this.Model.create(payload)) as unknown as IModel;
+        } catch (error) {
+            console.log(`${this.errorMsg} payload: `, JSON.stringify(payload));
+            console.error(`${this.errorMsg} creating item:`, error);
+            return null;
+        }
     }
-  }
 
-  async createOrUpdate(payload: IModel): Promise<IModel | null> {
-    try {
-      const doc: IModel & { _id: string } = await this.Model.findOne(payload);
-      return doc ? await this.update(doc._id, payload) : await this.create(payload);
-    } catch (error) {
-      console.log(`${this.errorMsg} payload: `, JSON.stringify(payload));
-      console.error(`${this.errorMsg} creating item:`, error);
-      return null;
+    public async createMany(payload: IModel[]): Promise<IModel[] | null> {
+        try {
+            return (await this.Model.insertMany(payload)) as unknown as IModel[];
+        } catch (error) {
+            console.log(`${this.errorMsg} payload: `, JSON.stringify(payload));
+            console.error(`${this.errorMsg} creating item:`, error);
+            return null;
+        }
     }
-  }
 
-  async update(id: string, payload: IModel): Promise<IModel | null> {
-    try {
-      if (!Types.ObjectId.isValid(id)) throw new Error('"id" is not valid.');
-      return (await this.Model.findByIdAndUpdate(id, payload, { new: true }).lean().exec()) as IModel;
-    } catch (error) {
-      console.log(`${this.errorMsg} update (id: ${id}):`, JSON.stringify(payload));
-      console.error('Error updating item:', error);
-      return null;
+    public async createOrUpdate(payload: IModel): Promise<IModel | null> {
+        try {
+            const doc: IModel & { _id: string } = await this.Model.findOne(payload);
+            return doc ? await this.update(doc._id, payload) : await this.create(payload);
+        } catch (error) {
+            console.log(`${this.errorMsg} payload: `, JSON.stringify(payload));
+            console.error(`${this.errorMsg} creating item:`, error);
+            return null;
+        }
     }
-  }
 
-  async delete(id: string): Promise<boolean> {
-    try {
-      if (!Types.ObjectId.isValid(id)) throw new Error('"id" is not valid.');
-      const deletedItem = await this.Model.findByIdAndDelete(id).exec();
-      return !!deletedItem;
-    } catch (error) {
-      console.error(`${this.errorMsg} deleting item (id: ${id}):`, error);
-      return false;
+    public async update(id: string, payload: IModel): Promise<IModel | null> {
+        try {
+            if (!Types.ObjectId.isValid(id)) throw new Error('"id" is not valid.');
+            return (await this.Model.findByIdAndUpdate(id, payload, { new: true }).lean().exec()) as IModel;
+        } catch (error) {
+            console.log(`${this.errorMsg} update (id: ${id}):`, JSON.stringify(payload));
+            console.error('Error updating item:', error);
+            return null;
+        }
     }
-  }
 
-  Find: IFindMethods<IModel, TIndexes> = {
-    byId: async (id: string): Promise<IModel> => {
-      try {
-        return (await this.Model.findById(id).lean().exec()) as IModel;
-      } catch (error) {
-        console.error(`${this.errorMsg} finding by id (id: ${id}):`, error);
-        return null;
-      }
-    },
-    //@ts-ignore
-    byIndex: async (key: TIndexes, value: string, limit: number = 0) => {
-      try {
-        if (!value) throw new Error(`Value "${value}" for ${key} is required.`);
-        const filter: FilterQuery<IDBModel> = { [key]: value } as FilterQuery<IDBModel>;
-        const query = this.Model.find(filter);
-        if (limit > 0) query.limit(limit);
-        if (limit === 1) return (await query.lean().exec())?.[0] as unknown as IModel;
-        return (await query.lean().exec()) as unknown as IModel[];
-      } catch (error) {
-        console.error(`${this.errorMsg} byIndex (key: ${key}, value: ${value}):`, error);
-        return limit === 1 ? null : [];
-      }
-    },
-    byQuery: async (conditions: FilterQuery<IModel>, limit: number = 0): Promise<IModel[]> => {
-      try {
-        const query = this.Model.find(conditions as FilterQuery<IDBModel>);
-        if (limit > 0) query.limit(limit);
-        return <IModel[]>await query.lean().exec();
-      } catch (error) {
-        console.error(`${this.errorMsg} byQuery conditions:`, error);
-        return [];
-      }
-    },
-    byDateRange: async (key: keyof IModel & string, startDate: Date, endDate: Date): Promise<IModel[]> => {
-      try {
-        if (typeof key !== 'string') throw new Error(`Key "${key}" is not a valid string key.`);
-        const query: FilterQuery<IDBModel> = {
-          [key]: {
-            $gte: startDate,
-            $lte: endDate,
-          },
-        } as FilterQuery<IDBModel>;
-        return <IModel[]>await this.Model.find(query).lean().exec();
-      } catch (error) {
-        console.error(`${this.errorMsg} byDateRange key: ${key}, startDate: ${startDate}, endDate: ${endDate}`);
-        return [];
-      }
-    },
-    byMultipleKeys: async (keys: { [key in TIndexes]?: string }): Promise<IModel[]> => {
-      try {
-        const query: FilterQuery<IDBModel> = {} as FilterQuery<IDBModel>;
-        for (const key in keys) {
-          if (Object.prototype.hasOwnProperty.call(keys, key)) {
-            if (this.Model.schema.paths[key]) {
-              query[key as keyof IDBModel] = keys[key] as any;
-            } else {
-              throw new Error(`Key "${key}" is not a valid field in the model.`);
+    public async delete(id: string): Promise<boolean> {
+        try {
+            if (!Types.ObjectId.isValid(id)) throw new Error('"id" is not valid.');
+            const deletedItem = await this.Model.findByIdAndDelete(id).exec();
+            return !!deletedItem;
+        } catch (error) {
+            console.error(`${this.errorMsg} deleting item (id: ${id}):`, error);
+            return false;
+        }
+    }
+
+    public Find: IFindMethods<IModel, TIndexes> = {
+        byId: async (id: string): Promise<IModel> => {
+            try {
+                return (await this.Model.findById(id).lean().exec()) as IModel;
+            } catch (error) {
+                console.error(`${this.errorMsg} finding by id (id: ${id}):`, error);
+                return null;
             }
-          }
-        }
-        return <IModel[]>await this.Model.find(query).lean().exec();
-      } catch (error) {
-        console.error(`${this.errorMsg} byMultipleKeys keys: `, JSON.stringify(keys));
-        return [];
-      }
-    },
-  };
+        },
+        //@ts-ignore
+        byIndex: async (key: TIndexes, value: string, limit: number = 0) => {
+            try {
+                if (!value) throw new Error(`Value "${value}" for ${key} is required.`);
+                const filter: QueryFilter<IDBModel> = { [key]: value } as QueryFilter<IDBModel>;
+                const query = this.Model.find(filter);
+                if (limit > 0) query.limit(limit);
+                if (limit === 1) return (await query.lean().exec())?.[0] as unknown as IModel;
+                return (await query.lean().exec()) as unknown as IModel[];
+            } catch (error) {
+                console.error(`${this.errorMsg} byIndex (key: ${key}, value: ${value}):`, error);
+                return limit === 1 ? null : [];
+            }
+        },
+        byQuery: async (conditions: QueryFilter<IModel>, limit: number = 0): Promise<IModel[]> => {
+            try {
+                const query = this.Model.find(conditions as QueryFilter<IDBModel>);
+                if (limit > 0) query.limit(limit);
+                return <IModel[]>await query.lean().exec();
+            } catch (error) {
+                console.error(`${this.errorMsg} byQuery conditions:`, error);
+                return [];
+            }
+        },
+        byDateRange: async (key: keyof IModel & string, startDate: Date, endDate: Date): Promise<IModel[]> => {
+            try {
+                if (typeof key !== 'string') throw new Error(`Key "${key}" is not a valid string key.`);
+                const query: QueryFilter<IDBModel> = {
+                    [key]: {
+                        $gte: startDate,
+                        $lte: endDate,
+                    },
+                } as QueryFilter<IDBModel>;
+                return <IModel[]>await this.Model.find(query).lean().exec();
+            } catch (error) {
+                console.error(`${this.errorMsg} byDateRange key: ${key}, startDate: ${startDate}, endDate: ${endDate}`);
+                return [];
+            }
+        },
+        byMultipleKeys: async (keys: { [key in TIndexes]?: string }): Promise<IModel[]> => {
+            try {
+                const query: QueryFilter<IDBModel> = {} as QueryFilter<IDBModel>;
+                for (const key in keys) {
+                    if (Object.prototype.hasOwnProperty.call(keys, key)) {
+                        if (this.Model.schema.paths[key]) {
+                            //@ts-ignore
+                            query[key as keyof IDBModel] = keys[key] as any;
+                        } else {
+                            throw new Error(`Key "${key}" is not a valid field in the model.`);
+                        }
+                    }
+                }
+                return <IModel[]>await this.Model.find(query).lean().exec();
+            } catch (error) {
+                console.error(`${this.errorMsg} byMultipleKeys keys: `, JSON.stringify(keys));
+                return [];
+            }
+        },
+    };
 
-  Get: IGetMethods<IModel> = {
-    all: async (): Promise<IModel[]> => {
-      try {
-        return <IModel[]>await this.Model.find().lean().exec();
-      } catch (error) {
-        console.error(`${this.errorMsg} Get All:`, error);
-        return [];
-      }
-    },
-  };
+    public Get: IGetMethods<IModel> = {
+        all: async (): Promise<IModel[]> => {
+            try {
+                return <IModel[]>await this.Model.find().lean().exec();
+            } catch (error) {
+                console.error(`${this.errorMsg} Get All:`, error);
+                return [];
+            }
+        },
+    };
 
-  AdditionalMethods: IAdditionalMethods<TIndexes> = {
-    countBy: async (key: TIndexes, value: string): Promise<number> => {
-      try {
-        if (!this.Model.schema.paths[key]) {
-          throw new Error(`Key "${key}" is not a valid field in the model.`);
-        }
-        const query: FilterQuery<IDBModel> = {
-          [key]: value as any,
-        } as FilterQuery<IDBModel>;
-        const count = await this.Model.countDocuments(query).exec();
-        return count;
-      } catch (error) {
-        console.error(`${this.errorMsg} countBy (key: ${key}, value: ${value}):`, error);
-        return 0;
-      }
-    },
-  };
+    public AdditionalMethods: IAdditionalMethods<TIndexes> = {
+        countBy: async (key: TIndexes, value: string): Promise<number> => {
+            try {
+                if (!this.Model.schema.paths[key]) {
+                    throw new Error(`Key "${key}" is not a valid field in the model.`);
+                }
+                const query: QueryFilter<IDBModel> = {
+                    [key]: value as any,
+                } as QueryFilter<IDBModel>;
+                const count = await this.Model.countDocuments(query).exec();
+                return count;
+            } catch (error) {
+                console.error(`${this.errorMsg} countBy (key: ${key}, value: ${value}):`, error);
+                return 0;
+            }
+        },
+    };
 }
 
 export type TRecordUpdateMode = 'CACHE' | 'CACHE_AND_DB' | 'DB';
@@ -315,98 +317,98 @@ interface IFindMethodsCacheExtended<IModel extends SchemasGlobal.Schemas.IDocume
 }
 
 export class DbConnectorCache<IDBModel extends Document, IModel extends SchemasGlobal.Schemas.IDocument, TIndexes extends string> extends DbConnector<IDBModel, IModel, TIndexes> implements IDbConnectorCache<IModel> {
-  private cache: RedisConnector<IModel>;
+    private cache: RedisConnector<IModel>;
 
-  constructor(ModelDB: Model<IDBModel>, cacheKey: string, cacheTtl?: number) {
-    super(ModelDB);
-    this.cache = new RedisConnector<IModel>(cacheKey, cacheTtl);
-  }
-
-  async create(payload: IModel, useCache: boolean = true): Promise<IModel | null> {
-    try {
-      const result = (await super.create(payload)) as IModel;
-      if (!useCache) return result;
-      return await this.cache.save(result?._id, result);
-    } catch (error) {
-      console.error(`${this.errorMsg} creating item with cache:`, error);
-      return null;
+    public constructor(ModelDB: Model<IDBModel>, cacheKey: string, cacheTtl?: number) {
+        super(ModelDB);
+        this.cache = new RedisConnector<IModel>(cacheKey, cacheTtl);
     }
-  }
 
-  async createMany(payload: IModel[], useCache: boolean = true): Promise<IModel[] | null> {
-    try {
-      const results = await super.createMany(payload);
-      if (!useCache) return results;
-      return await Promise.all(results.map(async (result) => await this.cache.save(result?._id, result)));
-    } catch (error) {
-      console.error(`${this.errorMsg} creating many items with cache:`, error);
-      return null;
-    }
-  }
-
-  async createOrUpdate(payload: IModel, useCache: boolean = true): Promise<IModel | null> {
-    try {
-      const result = await super.createOrUpdate(payload);
-      if (!useCache) return result;
-      return await this.cache.save(result?._id, result);
-    } catch (error) {
-      console.error(`${this.errorMsg} creating or updating item with cache:`, error);
-      return null;
-    }
-  }
-
-  async update(id: string, payload: IModel, updateMode: TRecordUpdateMode = 'CACHE_AND_DB'): Promise<IModel | null> {
-    try {
-      const { createdAt, updatedAt, __v, _id, ...updateData } = payload;
-      let updatedItem: IModel;
-
-      if (updateMode !== 'CACHE') updatedItem = await super.update(id, updateData as IModel);
-      else updatedItem = { ...(await this.Find.byId(id)), ...updateData };
-      if (updateMode !== 'DB') await this.cache.save(id, updatedItem);
-      return updatedItem;
-    } catch (error) {
-      console.error(`${this.errorMsg} updating item with cache:`, error);
-      return null;
-    }
-  }
-
-  async delete(id: string, useCache: boolean = true): Promise<boolean> {
-    try {
-      const result = await super.delete(id);
-      if (!useCache) return result;
-      return await this.cache.delete(id);
-    } catch (error) {
-      console.error(`${this.errorMsg} deleting item with cache:`, error);
-      return false;
-    }
-  }
-
-  async deleteFromCache(id: string): Promise<boolean> {
-    try {
-      return await this.cache.delete(id);
-    } catch (error) {
-      console.error(`${this.errorMsg} deleting item with cache:`, error);
-      return false;
-    }
-  }
-
-  Find: IFindMethodsCacheExtended<IModel, TIndexes> = {
-    //@ts-ignore
-    ...this.Find,
-    byId: async (id: string, useCache: boolean = true): Promise<IModel> => {
-      try {
-        if (useCache) {
-          const cachedResult = await this.cache.get(id);
-          if (cachedResult) return cachedResult;
+    public async create(payload: IModel, useCache: boolean = true): Promise<IModel | null> {
+        try {
+            const result = (await super.create(payload)) as IModel;
+            if (!useCache) return result;
+            return await this.cache.save(result?._id, result);
+        } catch (error) {
+            console.error(`${this.errorMsg} creating item with cache:`, error);
+            return null;
         }
+    }
 
-        const result = await this.Find.byId(id);
-        if (result && useCache) await this.cache.save(id, result);
-        return result;
-      } catch (error) {
-        console.error(`${this.errorMsg} finding by id with cache (id: ${id}):`, error);
-        return null;
-      }
-    },
-  };
+    public async createMany(payload: IModel[], useCache: boolean = true): Promise<IModel[] | null> {
+        try {
+            const results = await super.createMany(payload);
+            if (!useCache) return results;
+            return await Promise.all(results.map(async (result) => await this.cache.save(result?._id, result)));
+        } catch (error) {
+            console.error(`${this.errorMsg} creating many items with cache:`, error);
+            return null;
+        }
+    }
+
+    public async createOrUpdate(payload: IModel, useCache: boolean = true): Promise<IModel | null> {
+        try {
+            const result = await super.createOrUpdate(payload);
+            if (!useCache) return result;
+            return await this.cache.save(result?._id, result);
+        } catch (error) {
+            console.error(`${this.errorMsg} creating or updating item with cache:`, error);
+            return null;
+        }
+    }
+
+    public async update(id: string, payload: IModel, updateMode: TRecordUpdateMode = 'CACHE_AND_DB'): Promise<IModel | null> {
+        try {
+            const { createdAt, updatedAt, __v, _id, ...updateData } = payload;
+            let updatedItem: IModel;
+
+            if (updateMode !== 'CACHE') updatedItem = await super.update(id, updateData as IModel);
+            else updatedItem = { ...(await this.Find.byId(id)), ...updateData };
+            if (updateMode !== 'DB') await this.cache.save(id, updatedItem);
+            return updatedItem;
+        } catch (error) {
+            console.error(`${this.errorMsg} updating item with cache:`, error);
+            return null;
+        }
+    }
+
+    public async delete(id: string, useCache: boolean = true): Promise<boolean> {
+        try {
+            const result = await super.delete(id);
+            if (!useCache) return result;
+            return await this.cache.delete(id);
+        } catch (error) {
+            console.error(`${this.errorMsg} deleting item with cache:`, error);
+            return false;
+        }
+    }
+
+    public async deleteFromCache(id: string): Promise<boolean> {
+        try {
+            return await this.cache.delete(id);
+        } catch (error) {
+            console.error(`${this.errorMsg} deleting item with cache:`, error);
+            return false;
+        }
+    }
+
+    public Find: IFindMethodsCacheExtended<IModel, TIndexes> = {
+        //@ts-ignore
+        ...this.Find,
+        byId: async (id: string, useCache: boolean = true): Promise<IModel> => {
+            try {
+                if (useCache) {
+                    const cachedResult = await this.cache.get(id);
+                    if (cachedResult) return cachedResult;
+                }
+
+                const result = await this.Find.byId(id);
+                if (result && useCache) await this.cache.save(id, result);
+                return result;
+            } catch (error) {
+                console.error(`${this.errorMsg} finding by id with cache (id: ${id}):`, error);
+                return null;
+            }
+        },
+    };
 }

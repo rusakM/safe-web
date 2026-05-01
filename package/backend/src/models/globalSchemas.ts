@@ -10,21 +10,21 @@ export namespace Fields {
             }
 
             export const validators = {
-              url: Joi.string().optional().allow(''),
-              key: Joi.string().optional().allow(''),
+                url: Joi.string().optional().allow(''),
+                key: Joi.string().optional().allow(''),
             };
 
             export const mainValidator = Joi.object().keys(validators);
 
             export const dbSchema: SchemaDefinition = {
-              key: {
-                type: String,
-                validate: (val: any) => !validators.key.validate(val).error,
-              },
-              url: {
-                type: String,
-                validate: (val: any) => !validators.url.validate(val).error,
-              },
+                key: {
+                    type: String,
+                    validate: (val: any) => !validators.key.validate(val).error,
+                },
+                url: {
+                    type: String,
+                    validate: (val: any) => !validators.url.validate(val).error,
+                },
             };
         }
 
@@ -37,19 +37,19 @@ export namespace Fields {
             }
 
             export const validators = {
-              original: Joi.object().keys(Simple.validators),
-              thumbnail: Joi.object().keys(Simple.validators),
-              name: Joi.string().optional().allow(''),
-              type: Joi.string().optional().allow(''),
+                original: Joi.object().keys(Simple.validators),
+                thumbnail: Joi.object().keys(Simple.validators),
+                name: Joi.string().optional().allow(''),
+                type: Joi.string().optional().allow(''),
             };
 
             export const mainValidator = Joi.object().keys(validators);
 
             export const dbSchema: SchemaDefinition = {
-              name: String,
-              original: Simple.dbSchema,
-              thumbnail: Simple.dbSchema,
-              type: String,
+                name: String,
+                original: Simple.dbSchema,
+                thumbnail: Simple.dbSchema,
+                type: String,
             };
         }
     }
@@ -57,18 +57,18 @@ export namespace Fields {
 
 export namespace Options {
     export const virtuals: SchemaOptions = {
-      toJSON: { virtuals: true },
-      toObject: { virtuals: true },
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
     };
 
     export const timestamps: SchemaOptions = {
-      timestamps: true,
+        timestamps: true,
     };
 
     export const dbSchema: SchemaOptions = {
-      ...virtuals,
-      ...timestamps,
-      strict: false,
+        ...virtuals,
+        ...timestamps,
+        strict: false,
     };
 }
 
@@ -88,12 +88,12 @@ export namespace Schemas {
 
 export namespace Validators {
     export function schemaValidator(validator: Joi.Schema, val: any): boolean {
-      const err = validator.validate(val).error;
-      if (err) {
-        console.error('Schema validation error!!!');
-        console.log(JSON.stringify(err));
-      }
+        const err = validator.validate(val).error;
+        if (err) {
+            console.error('Schema validation error!!!');
+            console.log(JSON.stringify(err));
+        }
 
-      return !err;
+        return !err;
     }
 }

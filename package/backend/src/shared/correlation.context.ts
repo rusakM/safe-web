@@ -7,40 +7,40 @@ type Context = {
 };
 
 class CorrelationContext {
-  private storage = new AsyncLocalStorage<Context>();
+    private storage = new AsyncLocalStorage<Context>();
 
-  run<T>(callback: () => T | Promise<T>): T | Promise<T> {
-    return this.storage.run({}, callback);
-  }
+    run<T>(callback: () => T | Promise<T>): T | Promise<T> {
+        return this.storage.run({}, callback);
+    }
 
-  setCorrelationId(correlationId: string) {
-    const store = this.storage.getStore();
-    if (store) store.correlationId = correlationId;
-  }
+    setCorrelationId(correlationId: string) {
+        const store = this.storage.getStore();
+        if (store) store.correlationId = correlationId;
+    }
 
-  getCorrelationId(): string | undefined {
-    return this.storage.getStore()?.correlationId ?? 'N/A';
-  }
+    getCorrelationId(): string | undefined {
+        return this.storage.getStore()?.correlationId ?? 'N/A';
+    }
 
-  setUserId(userId: string) {
-    const store = this.storage.getStore();
-    if (store) store.userId = userId;
-  }
+    setUserId(userId: string) {
+        const store = this.storage.getStore();
+        if (store) store.userId = userId;
+    }
 
-  getUserId(): string | undefined {
-    return this.storage.getStore()?.userId ?? 'N/A';
-  }
+    getUserId(): string | undefined {
+        return this.storage.getStore()?.userId ?? 'N/A';
+    }
 
-  getCorrelationAndUserId(): { correlationId: string; userId: string } {
-    return { correlationId: this.getCorrelationId(), userId: this.getUserId() };
-  }
+    getCorrelationAndUserId(): { correlationId: string; userId: string } {
+        return { correlationId: this.getCorrelationId(), userId: this.getUserId() };
+    }
 
-  async withCorrelationId<T>(callback: () => T | Promise<T>, correlationId?: string): Promise<T> {
-    return this.run(async () => {
-      this.setCorrelationId(correlationId ?? uuid());
-      return callback();
-    });
-  }
+    async withCorrelationId<T>(callback: () => T | Promise<T>, correlationId?: string): Promise<T> {
+        return this.run(async () => {
+            this.setCorrelationId(correlationId ?? uuid());
+            return callback();
+        });
+    }
 }
 
 export const correlationContext = new CorrelationContext();
