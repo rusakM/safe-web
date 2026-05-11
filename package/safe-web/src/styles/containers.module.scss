@@ -1,0 +1,120 @@
+@use "./breakpoints.scss";
+
+.buttonsContainer {
+    align-items: stretch !important;
+    width: 100%;
+    padding: 0 1em;
+
+    & > * {
+        margin: 0.5em 0;
+    }
+
+    @media (min-width: breakpoints.$desktop) {
+        min-width: 250px;
+        max-width: 400px;
+        width: 30%;
+    }
+}
+
+.bottomButtonsContainer {
+	gap: 1em;
+    padding: 1.5em 0.5em 0.5em 0.5em;
+	flex-direction: column;
+	position: relative;
+	bottom: 0;
+	margin-top: auto;
+	margin-bottom: 25px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+	@media (min-width: breakpoints.$desktop) {
+		gap: 2.5em;
+		padding-top: 3em;
+		flex-direction: row;
+	}
+}
+
+.basicGap {
+    gap: 1em;
+
+    @media (min-width: breakpoints.$desktop) {
+        gap: 36px;
+    }
+}
+
+.halfScreenContainer {
+    width: 50%;
+    background-color: inherit;
+}
+
+.restrictedFlexibleContainer {
+    background-color: inherit;
+    @media (min-width: breakpoints.$desktop) {
+        width: 75%;
+    }
+
+    @media (min-width: breakpoints.$large-desktop) {
+        width: 50%;
+    }
+}
+
+.restrictedFlexibleContainer2 {
+    background-color: inherit;
+    @media (min-width: breakpoints.$desktop) {
+        width: 90%;
+    }
+    @media (min-width: breakpoints.$large-desktop) {
+        width: 70%;
+    }
+}
+
+.centerFlexibleContainer {
+    @media (min-width: breakpoints.$desktop) {
+        margin-left: 12.5%;
+    }
+    @media (min-width: breakpoints.$large-desktop) {
+        margin-left: 25%;
+    }
+}
+
+.centerFlexibleContainer2 {
+    @media (min-width: breakpoints.$desktop) {
+        margin-left: 5%;
+    }
+    @media (min-width: breakpoints.$large-desktop) {
+        margin-left: 15%;
+    }
+}
+
+.alignFlexStart {
+    align-items: flex-start !important;
+}
+
+.justifyFlexStart {
+    justify-content: flex-start !important;
+}
+
+.justifySpaceBetween {
+    justify-content: space-between !important;
+}
+
+.pagePadding {
+    padding-top: 1em !important;
+
+    @media (min-width: breakpoints.$desktop) {
+        padding-top: 5em !important;
+    }
+}
+
+.pagePadding2 {
+    padding-top: 3em !important;
+
+    @media (min-width: breakpoints.$desktop) {
+        padding-top: 5em !important;
+    }
+}
+
+.overscrollBlocked {
+    overscroll-behavior-y: contain;
+}

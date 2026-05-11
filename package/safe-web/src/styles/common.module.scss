@@ -1,0 +1,199 @@
+@use "./breakpoints.scss";
+@use "./fonts.scss";
+@use "./mixins.scss";
+
+.basicText {
+    font-family: fonts.$poppins-regular, sans-serif;
+}
+
+.justifiedText {
+    text-align: justify;
+}
+
+.leftSideText {
+    text-align: left !important;
+}
+
+.rightSideText {
+    text-align: right !important;
+}
+
+.centeredText {
+    text-align: center;
+}
+
+.basicLineHeight {
+    line-height: 1.5em;
+}
+
+.noPadding {
+    padding: 0 !important;
+}
+
+.noHorizontalPadding {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.noMargin {
+    margin: 0 !important;
+}
+
+.smallHorizontalPadding {
+    padding-top: 1em !important;
+    padding-bottom: 1em !important;
+}
+
+.defaultHorizontalPadding {
+    padding-top: 2em !important;
+    padding-bottom: 2em !important;
+}
+
+.largeHorizontalPadding {
+    padding-top: 4em !important;
+    padding-bottom: 4em !important;
+}
+
+.smallVerticalPadding {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+
+.inheritBackground {
+    background-color: inherit !important;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.rowReverse {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0;
+}
+
+.centerFlex {
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.padding1em {
+    padding: 1em;
+}
+
+.sectionImg {
+    padding: 3em 25%;
+    width: 100%;
+    max-height: 50%;
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 50%;
+        padding: 0 5em; 
+        max-width: 500px;
+    }
+}
+
+.basicHeader {
+    font-size: 52px;
+    @include mixins.basicHeader();
+    @include mixins.conditionalFont();
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 128px;
+    }
+
+
+}
+
+.basicHeader2 {
+    font-size: 36px;
+    @include mixins.basicHeader();
+    @include mixins.conditionalFont();
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 60px;
+    }
+}
+
+.basicHeader3 {
+    font-size: 36px;
+    @include mixins.basicHeader();
+    @include mixins.conditionalFont();
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 52px;
+    }
+}
+
+.basicHeader4 {
+    font-size: 14px;
+    @include mixins.basicHeader();
+    @include mixins.conditionalFont();
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 20px;
+    }
+}
+
+.basicHeader5 {
+    font-size: 18px;
+    @include mixins.basicHeader();
+    @include mixins.conditionalFont();
+    padding: 0.5em;
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 24px;
+    }
+}
+
+.basicHeader6 {
+    font-size: 32px;
+    @include mixins.basicHeader();
+    @include mixins.conditionalFont();
+    padding: 0.5em;
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 56px;
+    }
+}
+
+.captionText {
+    @include mixins.conditionalFont();
+}
+
+.basicGap {
+    gap: 15px;
+}
+
+.width100 {
+    width: 100%;
+}
+
+.heightFull {
+    height: 100% !important;
+}
+
+.nonClickableCursor {
+    cursor: not-allowed !important;
+}
+
+.pointerCursor {
+    cursor: pointer;
+}
+
+.transparentBackground {
+    background-color: transparent !important;
+}

@@ -1,0 +1,48 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+@use "@styles/mixins.scss";
+
+.cardContainer {
+    width: 100%;
+    background-color: colors.$grey;
+    color: colors.$white;
+    @include mixins.basicGradient();
+    border: 2px solid colors.$grey-border;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px;
+    box-sizing: border-box;
+
+    &:hover {
+        filter: brightness(1.1);
+        transform: scale(1.01);
+        transition: all 0.5s ease;
+    }
+
+    & > p {
+        padding: 0 !important;
+        font-family: fonts.$lato, sans-serif;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+        line-height: 1.5em;
+        max-height: 1000px;
+        cursor: pointer;
+    }
+
+    .wrapped {
+        max-height: calc(3 * 1.5em);
+        transition: max-height 0.5s ease;
+    }
+}
+
+
+@media (min-width: breakpoints.$desktop) {
+    .cardContainer {
+        border-radius: 14px;
+        padding: 14px;
+    }
+}

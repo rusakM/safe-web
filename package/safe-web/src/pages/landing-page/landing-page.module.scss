@@ -1,0 +1,193 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+
+.first {
+    margin-top: -10px;
+    padding-top: 30px;
+    min-height: 90dvh;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    & > div > div > p {
+        padding: 0.25em 0;
+        text-align: left;
+    }
+
+    @media (min-width: breakpoints.$desktop) {
+        margin-top: -100px;
+        padding-top: 142px;
+
+        & > div > div > p {
+            font-size: 10dvh !important;
+        }
+    }
+
+    .loginBtn {
+        width: 50%;
+        max-width: 124px;
+        @media (min-width: breakpoints.$desktop) {
+            max-width: 224px;
+        }
+    }
+}
+
+.first, .third, .fifth {
+    background-color: colors.$violet-dark;
+    background: radial-gradient(ellipse at center, colors.$violet-light 44%, colors.$violet-dark 100%);
+}
+
+.third {
+    @media (max-width: breakpoints.$desktop) {
+        padding-top: 1.5em;
+        padding-bottom: 1.5em;
+    }
+}
+
+.fourth {
+    padding-bottom: 1.5em;
+
+    @media (min-width: breakpoints.$desktop) {
+        padding-bottom: 2.5em;
+    }
+}
+
+.fifth {
+    padding-top: 0;
+
+    @media (max-width: breakpoints.$desktop) {
+        padding-bottom: 2em;
+    }
+}
+
+.halfScreenDesktop {
+    @media (min-width: breakpoints.$desktop) {
+        width: 50%;
+    }
+}
+
+.landingPageImg {
+    max-height: 90%;
+    max-width: 90%;
+    padding-top: 1em;
+
+    @media (min-width: breakpoints.$desktop) {
+        padding-top: 0;
+    }
+}
+
+.instructionTextContainer {
+    padding: 1em;
+}
+
+.instructionButtonsContainer {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+
+    @media (min-width: breakpoints.$desktop) {
+        gap: 18px;
+    }
+}
+
+.instructionBtn {
+    max-width: 40px;
+    width: 20%;
+    height: 10px;
+    border-radius: 5px;
+    padding: 0;
+    border-width: 0;
+
+    @media (min-width: breakpoints.$desktop) {
+        max-width: 100px;
+        height: 22px;
+        border-radius: 11px;
+    }
+}
+
+.instructionBtn:hover, .instructionBtnActive {
+    transform: scale(1.15);
+    filter: brightness(1.2);
+}
+
+.instructionText {
+    line-height: 1.5;
+    height: calc(5 * 1.5em);
+
+    @media (min-width: breakpoints.$desktop) {
+        height: calc(4 * 1.5em);
+    }
+}
+
+.basicText {
+    font-family: fonts.$lato, sans-serif;
+    font-size: 16px;
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 20px;
+    }
+}
+
+.textCardsContainer {
+    gap: 10px;
+    padding: 1em;
+}
+
+.blogHeaderContainer {
+    position: relative;
+    z-index: 5;
+}
+
+.blogHeader {
+    @media (min-width: breakpoints.$desktop) {
+        width: 75%;
+        max-width: 780px;
+    }
+}
+
+.blogImg {
+    position: relative;
+    bottom: 1em;
+    @media (min-width: breakpoints.$desktop) {
+        bottom: 100px;
+    }
+}
+
+.partnersGrid {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, auto);
+
+    @media (min-width: breakpoints.$desktop) {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, auto);
+        padding-bottom: 3em;
+    }
+}
+
+.partnersItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+
+    & > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.partnersImg {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    cursor: pointer;
+}

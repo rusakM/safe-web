@@ -1,0 +1,35 @@
+@font-face {
+    font-family: "PlayfairDisplay";
+    src: url("../assets/fonts/PlayfairDisplay.ttf") format("truetype");
+    font-weight: normal;
+    font-size: normal;
+}
+
+$playfair-display: "PlayfairDisplay";
+
+@font-face {
+    font-family: "PoppinsRegular";
+    src: url("../assets/fonts/Poppins-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-size: normal;
+}
+
+$poppins-regular: "PoppinsRegular";
+
+@font-face {
+    font-family: "GFSDidot";
+    src: url("../assets/fonts/GFSDidot.ttf") format("truetype");
+    font-weight: normal;
+    font-size: normal;
+}
+
+$gfs-didot: "GFSDidot";
+
+@font-face {
+    font-family: "Lato";
+    src: url("../assets/fonts/Lato-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-size: normal;
+}
+
+$lato: "Lato";

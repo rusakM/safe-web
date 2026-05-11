@@ -1,0 +1,16 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+
+.container {
+    display: flex;
+    flex-direction: row;
+    min-height: breakpoints.$max-height;
+    background-color: colors.$dark-glass;
+}
+
+.viewer {
+    width: 100%;
+    margin-top: 50;
+    display: flex;
+    flex-direction: column;
+}

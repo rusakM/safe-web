@@ -1,0 +1,72 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+
+.footer {
+    background-color: colors.$black;
+    text-align: center;
+    padding: 1em;
+    padding-bottom: 0;
+    padding-top: 2em;
+    margin-bottom: -1em;
+}
+
+.logo {
+    margin: 5px;
+    height: 1.5em;
+
+    @media (min-width: breakpoints.$desktop) {
+        height: 56px;
+        margin: 10px;
+    }
+}
+
+.coFundedImg {
+    height: 2.5em;
+    margin: 2em;
+
+    @media (min-width: breakpoints.$desktop) {
+        height: 68px;
+        margin-bottom: 3.5em;
+        margin-top: 3.5em;
+    }
+}
+
+.captionText {
+    align-items: center;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.copyright {
+    font-size: 14px;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    text-align: center;
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 16px;
+    }
+}
+
+.ccIcon {
+    display: inline-flex;
+
+    img {
+        margin-left: 0.3rem;
+        width: 1em;
+        height: 1em;
+        fill: currentColor; // SVG dziedziczy kolor tekstu
+    }
+}
+
+.privacyRef {
+    padding: 0.5em;
+    cursor: pointer;
+    font-size: 14px;
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 16px;
+    }
+}

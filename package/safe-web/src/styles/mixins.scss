@@ -1,0 +1,34 @@
+@use "./colors.scss";
+@use "./fonts.scss";
+
+@mixin basicGradient() {
+    background-image: 
+        linear-gradient(to right, colors.$glass6, colors.$glass4),
+        linear-gradient(to right, colors.$glass4, colors.$glass40);
+}
+
+@mixin basicHeader() {
+    text-align: center;
+    padding: 1em;
+    text-transform: none;
+    color: colors.$text;
+    background-color: transparent;
+}
+
+@mixin conditionalFont() {
+    font-family: fonts.$playfair-display, sans-serif;
+
+    [lang="el"] & {
+        font-family: fonts.$gfs-didot, sans-serif;
+    }
+}
+
+@mixin buttonShadow($color) {
+  box-shadow: 0 4px 0 $color;
+}
+
+@mixin desktop-hover {
+    @media (hover: hover) and (pointer: fine) {
+        @content;
+    }
+}

@@ -1,0 +1,64 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: transparent;
+    flex-direction: row;
+}
+
+.desktopFit {
+    @media (min-width: breakpoints.$desktop) {
+        max-width: 1500px;
+    }
+}
+
+.column {
+    flex-direction: column;
+}
+
+.columnReverse {
+    flex-direction: column-reverse;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.rowReverse {
+    flex-direction: row-reverse;
+}
+
+.allScreenHeight {
+    height: 90vh;
+}
+
+// content aligment
+.center {
+    justify-content: center;
+}
+
+.left {
+    justify-content: flex-start;
+}
+
+.right {
+    justify-content: flex-end;
+}
+
+// justify alignment
+.justifycenter {
+    align-items: center;
+}
+
+.justifyleft {
+    align-items: flex-start;
+}
+
+.justifyright {
+    align-items: flex-end;
+}
