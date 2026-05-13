@@ -21,7 +21,7 @@ services:
 
     redis:
         image: redis:7-alpine
-        container_name: 'planet-goals-redis-${APP_MODE}'
+        container_name: 'safe-web-redis-${APP_MODE}'
         restart: always
         ports:
             - '${REDIS_HOST_PORT}:${REDIS_HOST_PORT}'

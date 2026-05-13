@@ -107,12 +107,12 @@
 }
 
 .basicHeader {
-    font-size: 52px;
+    font-size: 36px;
     @include mixins.basicHeader();
     @include mixins.conditionalFont();
 
     @media (min-width: breakpoints.$desktop) {
-        font-size: 128px;
+        font-size: 72px;
     }
 
 

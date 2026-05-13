@@ -81,7 +81,7 @@ const LandingPage: React.FC = () => {
             </PrimaryContainer>
             {/* third */}
             <PrimaryContainer direction="column" additionalClassess={styles.third} >
-                <PrimaryContainer direction={isMobile ? "column" : "row"} width="desktopFit" additionalClassess={styles.third} height={isMobile ? "auto" : "allScreenHeight"}>
+                <PrimaryContainer direction={isMobile ? "column" : "row"} width="desktopFit" height={isMobile ? "auto" : "allScreenHeight"}>
                     <PrimaryContainer direction="column" additionalClassess={`${!isMobile ? styles.halfScreenDesktop : ''}`}>
                         <img src={InstructionSlides[instructionSlide]} alt="instruction" className={`${styles.landingPageImg}`} />
                     </PrimaryContainer>
