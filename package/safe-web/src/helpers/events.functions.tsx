@@ -18,14 +18,14 @@ export function generateRandomId(length?: number): string {
 }
 
 export function handleInputText(dispatch: Dispatch<SetStateAction<string>>, cb: () => void = () => {}) {
-    return (event: ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        dispatch(event.target.value);
+    return (event?: ChangeEvent<HTMLInputElement>) => {
+        event?.preventDefault();
+        dispatch((event as ChangeEvent<HTMLInputElement>)?.target?.value);
         cb();
     };
 }
 
-export function checkCurrentUser(currentUser: IUser) {
+export function checkCurrentUser(currentUser: IUser | null) {
     return (currentUser && currentUser?.email);
 }
 

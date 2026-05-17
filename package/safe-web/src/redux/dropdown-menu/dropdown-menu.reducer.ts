@@ -8,6 +8,9 @@ const INITIAL_STATE: IDropdownMenuStore = {
     languagesMenu: {
         hidden: true,
     },
+    userMenu: {
+        hidden: true,
+    },
 };
 
 const menuReducer = (
@@ -17,7 +20,7 @@ const menuReducer = (
     switch (action.type) {
         case DropdownMenuTypes.TOGGLE_HEADER_MENU_HIDDEN:
             return {
-                ...state,
+                ...INITIAL_STATE,
                 headerMenu: {
                     ...state.headerMenu,
                     hidden: !state.headerMenu.hidden,
@@ -25,12 +28,20 @@ const menuReducer = (
             };
         case DropdownMenuTypes.TOGGLE_LANGUAGES_MENU_HIDDEN:
             return {
-                ...state,
+                ...INITIAL_STATE,
                 languagesMenu: {
                     ...state.languagesMenu,
                     hidden: !state.languagesMenu.hidden,
                 },
             };
+        case DropdownMenuTypes.TOGGLE_USER_MENU_HIDDEN:
+            return {
+                ...INITIAL_STATE,
+                userMenu: {
+                    ...state.userMenu,
+                    hidden: !state.userMenu.hidden
+                }
+            }
         case DropdownMenuTypes.HIDE_ALL:
             return INITIAL_STATE;
         default:

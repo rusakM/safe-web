@@ -1,0 +1,10 @@
+@use "./colors.scss";
+
+.errorInput {
+    border-color: colors.$red-button-pressed !important;
+    color: colors.$red-button-pressed !important;
+}
+
+.errorText {
+    color: colors.$red-button-pressed !important;
+}

@@ -1,0 +1,23 @@
+import React, { type ChangeEvent, type ReactElement } from 'react';
+
+import styles from './checkbox.module.scss';
+import errorStyles from '../../styles/errors.module.scss';
+
+interface ICheckbox {
+    additionalClasses?: string,
+    checked: boolean,
+    disabled?: boolean,
+    error?: boolean,
+    label: ReactElement | string,
+    onChange?: (event: ChangeEvent) => void,
+}
+
+const Checkbox: React.FC<ICheckbox> = ({ additionalClasses, checked, disabled = false, error, label, onChange }) => (
+    <label className={`${styles.checkbox}${additionalClasses ? ` ${additionalClasses}` : ''}`}>
+        <input type="checkbox" checked={checked} disabled={disabled} onChange={onChange} />
+        <span className={`${error ? `${errorStyles.errorInput} ` : ''}${styles.customCheckbox}`} data-checked={checked}>{checked && "✔"}</span>
+        <span className={`${error ? `${errorStyles.errorText} ` : ''}${styles.label}`}>{label}</span>
+    </label>
+)
+
+export default Checkbox;

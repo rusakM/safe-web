@@ -11,6 +11,10 @@ export function msToSeconds(timeInMs: number) {
     return Math.floor(timeInMs / 1000);
 }
 
+export function capitalizeFirstLetter (str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function convertTimeUntilToRemainedSeconds(timeUntil: number): number {
     const remainedTime = timeUntil - Date.now();
     const seconds = msToSeconds(remainedTime);

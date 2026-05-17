@@ -84,7 +84,7 @@
     align-items: center;
 
     &:hover {
-        background-color: colors.$glass4;
+        background-color: colors.$grey-light-border;
     }
 
     & > img {
@@ -93,6 +93,13 @@
 
     @media (min-width: breakpoints.$desktop) {
         height: 60%;
+    }
+}
+
+.controlIcon {
+    @media (max-width: breakpoints.$desktop) {
+        max-width: 50px;
+        max-height: 50px;
     }
 }
 

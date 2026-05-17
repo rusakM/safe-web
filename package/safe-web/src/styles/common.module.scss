@@ -1,9 +1,10 @@
 @use "./breakpoints.scss";
+@use "./colors.scss";
 @use "./fonts.scss";
 @use "./mixins.scss";
 
 .basicText {
-    font-family: fonts.$poppins-regular, sans-serif;
+    font-family: fonts.$lato, sans-serif;
 }
 
 .justifiedText {
@@ -20,6 +21,10 @@
 
 .centeredText {
     text-align: center;
+}
+
+.blueText {
+    color: colors.$links;
 }
 
 .basicLineHeight {
@@ -139,12 +144,12 @@
 }
 
 .basicHeader4 {
-    font-size: 14px;
+    font-size: 24px;
     @include mixins.basicHeader();
     @include mixins.conditionalFont();
 
     @media (min-width: breakpoints.$desktop) {
-        font-size: 20px;
+        font-size: 36px;
     }
 }
 
@@ -167,6 +172,16 @@
 
     @media (min-width: breakpoints.$desktop) {
         font-size: 56px;
+    }
+}
+
+.basicParagraph1 {
+    font-size: 14px;
+    font-family: fonts.$lato, sans-serif;
+    color: colors.$white;
+    
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 16px;
     }
 }
 

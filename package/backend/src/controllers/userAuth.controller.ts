@@ -17,6 +17,7 @@ async function register(req: Request, res: Response) {
     if (user && user.confirmed) throw errorsAdapter.Global.createError(errorsAdapter.Global.ErrorsEnum.USER_EMAIL_EXIST, { email: req.body.email });
 
     const verificationCode = accountService.helpers.generateVerificationCode();
+    let isCreatedUserNow = false;
 
     if (!user) {
         const userData = req.body;
@@ -30,11 +31,12 @@ async function register(req: Request, res: Response) {
         };
 
         user = await accountService.DB.create(newUser);
+        isCreatedUserNow = true;
     } else {
         user = await accountService.DB.update(user._id, { verificationCodes: [{ createdAt: new Date().toISOString(), value: verificationCode }, ...(user?.verificationCodes || [])].slice(0, ConstantsGlobal.App.VERIFICATION_CODES_ARRAY_LENGTH) });
     }
 
-    new mailService.Email(user).sendVerificationCode(verificationCode, user?.userInterfaceLanguage);
+    new mailService.Email(user).sendVerificationCode(verificationCode, user?.userInterfaceLanguage, isCreatedUserNow);
 
     const responseBody = {
         message: 'Verification required',

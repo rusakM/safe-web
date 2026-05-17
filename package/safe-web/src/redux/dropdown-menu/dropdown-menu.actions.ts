@@ -11,3 +11,7 @@ export const toggleHeaderMenuHidden = () => ({
 export const toggleLanguagesMenuHidden = () => ({
     type: DropdownMenuTypes.TOGGLE_LANGUAGES_MENU_HIDDEN,
 });
+
+export const toggleUserMenuHidden = () => ({
+    type: DropdownMenuTypes.TOGGLE_USER_MENU_HIDDEN
+});

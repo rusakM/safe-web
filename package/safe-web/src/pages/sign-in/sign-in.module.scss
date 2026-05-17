@@ -1,0 +1,34 @@
+@use "@styles/breakpoints.scss";
+
+.img {
+    padding: 3.5em 2em 1em 2em;
+    width: 45%;
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 12%;
+        min-width: 150px;
+        max-width: 250px;
+
+        padding-top: 8em;
+        padding-bottom: 0;
+    }
+
+}
+
+.errorDescriptionContainer {
+    min-height: 50px;
+    padding-top: 0.5em;
+}
+
+.bottomButtons {
+    @media (max-width: breakpoints.$mobile) {
+        margin-bottom: 1.5em;
+    }
+
+    @media (min-width: breakpoints.$desktop) {
+        padding-top: 3em;
+        & > * {
+            margin: 1em;
+        }
+    }
+}

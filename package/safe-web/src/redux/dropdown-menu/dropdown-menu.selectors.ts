@@ -12,3 +12,8 @@ export const selectLanguagesMenuHidden = createSelector(
     [selectMenu],
     (menu: IStore["dropdownMenu"]) => menu.languagesMenu.hidden
 );
+
+export const selectUserMenuHidden = createSelector(
+    [selectMenu],
+    (menu: IStore["dropdownMenu"]) => menu.userMenu.hidden
+);

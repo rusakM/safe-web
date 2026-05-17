@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "@tolgee/react";
 
 import { constantsTranslations, constantsUrls } from "../../helpers/constants";
 import tolgeeConfig from "../../translations";
-import { useDeviceType } from "../../helpers/responsiveContainers";
 import styles from "./header.module.scss";
 
 //components
@@ -23,62 +23,75 @@ import UserIcon from "../../assets/icons/user.svg";
 import {
     selectHeaderMenuHidden,
     selectLanguagesMenuHidden,
+    selectUserMenuHidden,
 } from "../../redux/dropdown-menu/dropdown-menu.selectors";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 import {
     hideAll,
     toggleHeaderMenuHidden,
     toggleLanguagesMenuHidden,
+    toggleUserMenuHidden
 } from "../../redux/dropdown-menu/dropdown-menu.actions";
 import { signOut, userEditStart } from "../../redux/user/user.actions";
 import type { IUser } from "../../types/user";
-
+import { capitalizeFirstLetter } from "../../helpers/shared.functions";
 
 enum MENU_ACTIONS {
     COURSE = "COURSE",
-    LOGOUT = "LOGOUT",
     MAIN_PAGE = "MAIN_PAGE",
     MATERIALS = "MATERIALS",
     ME = "ME",
     SIMULATOR = "SIMULATOR",
 }
 
+enum USER_MENU_ACTIONS {
+    USER_PROFILE = "USER_PROFILE",
+    LOGOUT = "LOGOUT"
+}
+
 const Header: React.FC = () => {
-    const { isMobile } = useDeviceType();
+    const isMobile = useMediaQuery({ maxWidth: 1280 });
     const { t } = useTranslate();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const currentUser = useSelector(selectCurrentUser);
     const isHeaderMenuHidden = useSelector(selectHeaderMenuHidden);
     const isLanguagesMenuHidden = useSelector(selectLanguagesMenuHidden);
+    const isUserMenuHidden = useSelector(selectUserMenuHidden);
 
     const languagesMenuRef = useRef<HTMLElement>(null);
     const headerMenuRef = useRef<HTMLElement>(null);
     const headerButtonRef = useRef<HTMLDivElement>(null);
     const languagesButtonRef = useRef<HTMLDivElement>(null);
+    const userMenuRef = useRef<HTMLElement>(null);
+    const userButtonRef = useRef<HTMLDivElement>(null);
 
     const hideAllMenus = useCallback(() => dispatch(hideAll()), []);
     const saveSelectedLanguage = (language: IUser['userInterfaceLanguage']) => dispatch(userEditStart({ userInterfaceLanguage: language }));
     const signOutStart = () => dispatch(signOut());
-    const toggleHeaderMenu = () => dispatch(toggleHeaderMenuHidden());
-    const toggleLanguagesMenu = () => dispatch(toggleLanguagesMenuHidden());
 
     const handleClickOutsideMenu = useCallback((event: MouseEvent) => {
-        const target = event.target as HTMLElement;
-        const isHeaderButton = headerButtonRef?.current?.contains(target as Node) || languagesButtonRef?.current?.contains(target as Node);
-        if (!headerMenuRef?.current?.contains(target as Node) 
-            && !languagesMenuRef?.current?.contains(target as Node) 
-            && !isHeaderButton
-        ) {
-            if (!isHeaderMenuHidden || !isLanguagesMenuHidden) hideAllMenus();
+        const target = event.target as Node;
+
+        const menus = [headerMenuRef, languagesMenuRef, userMenuRef];
+        const buttons = [headerButtonRef, languagesButtonRef, userButtonRef];
+
+        const isInsideMenu = menus.some(ref => ref?.current?.contains(target));
+        const isInsideButton = buttons.some(ref => ref?.current?.contains(target));
+
+        if (!isInsideMenu && !isInsideButton) {
+            if (!isHeaderMenuHidden || !isLanguagesMenuHidden || !isUserMenuHidden) {
+                hideAllMenus();
+            }
         }
+
         document.removeEventListener('mousedown', handleClickOutsideMenu);
-    }, [isHeaderMenuHidden, isLanguagesMenuHidden, hideAllMenus ]);
+    }, [isHeaderMenuHidden, isLanguagesMenuHidden, isUserMenuHidden, hideAllMenus]);
 
     useEffect(() => {
-        if (!isHeaderMenuHidden || !isLanguagesMenuHidden) document.addEventListener('mousedown', handleClickOutsideMenu)
+        if (!isHeaderMenuHidden || !isLanguagesMenuHidden || !isUserMenuHidden) document.addEventListener('mousedown', handleClickOutsideMenu)
         else document.removeEventListener('mousedown', handleClickOutsideMenu);
-    }, [handleClickOutsideMenu, isHeaderMenuHidden, isLanguagesMenuHidden]);
+    }, [handleClickOutsideMenu, isHeaderMenuHidden, isLanguagesMenuHidden, isUserMenuHidden]);
 
     const languages: [key: constantsTranslations.TLocale, value: string][] = [
         ["el", t("header.languages.greek")],
@@ -95,26 +108,18 @@ const Header: React.FC = () => {
         [MENU_ACTIONS.COURSE, t("header.menu.course")],
         [MENU_ACTIONS.MATERIALS, t("header.menu.materials")],
         [MENU_ACTIONS.SIMULATOR, t("header.menu.simulator")],
-        [MENU_ACTIONS.LOGOUT, t("header.menu.logout")]
     ];
 
-    const onClickHeaderMenu = () => {
-        if (!isLanguagesMenuHidden) toggleLanguagesMenu();
-        if (isHeaderMenuHidden) toggleHeaderMenu();
-        else hideAllMenus()
-    };
-
-    const onClickLanguagesMenu = () => {
-        if (!isHeaderMenuHidden) toggleHeaderMenu();
-        if (isLanguagesMenuHidden) toggleLanguagesMenu();
-        else hideAllMenus();
-    };
+    const userMenuItems: [key: USER_MENU_ACTIONS, value: string][] = [
+        [USER_MENU_ACTIONS.USER_PROFILE, t("header.menu.user-profile")],
+        [USER_MENU_ACTIONS.LOGOUT, t("header.menu.logout")]
+    ];
 
     const selectLanguage = (language: constantsTranslations.TLocale) => {
         tolgeeConfig.changeLanguage(language);
         localStorage.setItem("locale", language);
         if (currentUser?._id) saveSelectedLanguage(language);
-        toggleLanguagesMenu();
+        dispatch(toggleLanguagesMenuHidden());
     };
 
     const navigateToMainPage = () => {
@@ -125,10 +130,6 @@ const Header: React.FC = () => {
         switch(action) {
             case MENU_ACTIONS.COURSE:
                 navigate(constantsUrls.Main.startLessons);
-                break;
-            case MENU_ACTIONS.LOGOUT:
-                signOutStart();
-                localStorage.removeItem("token");
                 break;
             case MENU_ACTIONS.MAIN_PAGE:
                 navigateToMainPage();
@@ -148,6 +149,21 @@ const Header: React.FC = () => {
         }
     };
 
+    const selectUserMenuAction = (action: USER_MENU_ACTIONS) => {
+        switch (action) {
+            case USER_MENU_ACTIONS.USER_PROFILE:
+                navigate(constantsUrls.Main.myProfile);
+                break;
+            case USER_MENU_ACTIONS.LOGOUT:
+                signOutStart();
+                localStorage.removeItem("token");
+                break;
+            default:
+                console.log(action);
+                break;
+        }
+    }
+
     return (
         <div className={styles.headerWrapper}>
             <div className={styles.headerContainer}>
@@ -163,7 +179,7 @@ const Header: React.FC = () => {
                             {
                                 currentUser && !isMobile && menuItems.map(([key, value], index) => (
                                     <div className={`${styles.noHover} ${styles.control}`} key={`${key}_${index}`}>
-                                        <PrimaryButton color={"grey"} rounded={true} onClick={
+                                        <PrimaryButton color={"white"} gradient={true} rounded={true} onClick={
                                             () => selectMenuAction(key)
                                         }>
                                             {value}
@@ -172,34 +188,34 @@ const Header: React.FC = () => {
                                 ))
                             }
                             <div
-                                className={`${styles.control} ${styles.translationsButton} ${
+                                className={`${styles.control} ${styles.controlIcon} ${
                                     !isLanguagesMenuHidden
                                         ? styles.controlActive
                                         : ""
                                 }`}
-                                onClick={onClickLanguagesMenu}
+                                onClick={() => dispatch(toggleLanguagesMenuHidden())}
                                 ref={languagesButtonRef}
                             >
                                 <img src={TranslationIcon} alt="Select language" />
                             </div>
                             {
                                 currentUser && isMobile &&
-                                <div className={`${styles.control} ${
+                                <div className={`${styles.control} ${styles.controlIcon} ${
                                     !isHeaderMenuHidden ? styles.controlActive : ""
                                     }`}
-                                    onClick={onClickHeaderMenu}
+                                    onClick={() => dispatch(toggleHeaderMenuHidden())}
                                     ref={headerButtonRef}
                                     >
-                                    <img src={isHeaderMenuHidden ? HamburgerMenuIconClicked : HamburgerMenuIcon} alt="Menu" />
+                                    <img src={isHeaderMenuHidden ? HamburgerMenuIconClicked : HamburgerMenuIcon} alt="Menu" style={{ padding: "1px" }} />
                                 </div>
                             }
                             {
-                                currentUser && !isMobile &&
-                                <div className={`${styles.control} ${
+                                currentUser &&
+                                <div className={`${styles.control} ${styles.controlIcon} ${
                                     !isHeaderMenuHidden ? styles.controlActive : ""
                                     }`}
-                                    onClick={onClickHeaderMenu}
-                                    ref={headerButtonRef}
+                                    onClick={() => dispatch(toggleUserMenuHidden())}
+                                    ref={userButtonRef}
                                     >
                                     <img src={UserIcon} alt="Profile" />
                                 </div>
@@ -218,9 +234,18 @@ const Header: React.FC = () => {
                 currentUser &&
                 <DropdownMenu
                     isOpen={!isHeaderMenuHidden}
-                    items={menuItems.map(([key, value]) => [key, value])}
+                    items={menuItems.map(([key, value]) => [key, capitalizeFirstLetter(value)])}
                     onItemSelect={(item) => selectMenuAction(item as MENU_ACTIONS)}
                     reference={headerMenuRef}
+                />
+            }
+            {
+                currentUser &&
+                <DropdownMenu
+                    isOpen={!isUserMenuHidden}
+                    items={userMenuItems.map(([key, value]) => [key, capitalizeFirstLetter(value)])}
+                    onItemSelect={(item) => selectUserMenuAction(item as USER_MENU_ACTIONS)}
+                    reference={userMenuRef}
                 />
             }
         </div>

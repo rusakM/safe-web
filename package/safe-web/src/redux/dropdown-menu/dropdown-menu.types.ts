@@ -2,6 +2,7 @@ const DropdownMenuTypes = {
     HIDE_ALL: "HIDE_ALL",
     TOGGLE_HEADER_MENU_HIDDEN: "TOGGLE_HEADER_MENU_HIDDEN",
     TOGGLE_LANGUAGES_MENU_HIDDEN: "TOGGLE_LANGUAGES_MENU_HIDDEN",
+    TOGGLE_USER_MENU_HIDDEN: "TOGGLE_USER_MENU_HIDDEN",
 };
 
 export interface IDropdownMenu {
@@ -11,6 +12,7 @@ export interface IDropdownMenu {
 export interface IDropdownMenuStore {
     headerMenu: IDropdownMenu;
     languagesMenu: IDropdownMenu;
+    userMenu: IDropdownMenu;
 }
 
 export default DropdownMenuTypes;

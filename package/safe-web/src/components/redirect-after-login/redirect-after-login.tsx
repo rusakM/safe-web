@@ -5,7 +5,7 @@ import type { IUser } from "../../types/user";
 import { constantsUrls } from "../../helpers/constants";
 
 interface IRedirectAfterLogin {
-    currentUser: IUser,
+    currentUser: IUser | null,
     Component: React.FC,
 }
 

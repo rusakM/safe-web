@@ -1,0 +1,38 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+@use "@styles/mixins.scss";
+
+.textInput {
+    border: 1px solid colors.$grey-border;
+    color: colors.$glass;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: fonts.$lato, sans-serif;
+    background-color: colors.$grey;
+    padding: 5px 14px;
+    height: 34px;
+    width: 100%;
+    border-color: colors.$grey-border;
+    @include mixins.basicGradient();
+
+    &:not(.disabled):hover {
+        transform: scale(1.025);
+        transition: all 0.25s ease;
+    }
+    
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    &:focus {
+        border-color: colors.$glass40;
+        outline: none;
+    }
+
+    @media (min-width: breakpoints.$desktop) {
+        height: 50px;
+        font-size: 20px;
+        border-radius: 8px;
+    }
+}

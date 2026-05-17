@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslate } from "@tolgee/react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import PageContainer from "../../page-components/page-container/page-container";
@@ -8,6 +9,7 @@ import PrimaryButton from "../../components/primary-button/primary-button";
 
 import { useDeviceType } from "../../helpers/responsiveContainers";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
+import { constantsUrls } from "../../helpers/constants";
 
 import styles from "./landing-page.module.scss";
 import commonStyles from "../../styles/common.module.scss";
@@ -35,7 +37,6 @@ import SB from "../../assets/partners/sydic.png";
 import Smarts from "../../assets/partners/SMARTS.png";
 import Preparemeai from "../../assets/partners/preparemeai.svg";
 import UM from "../../assets/partners/UM.png";
-import { constantsUrls } from "../../helpers/constants";
 
 const InstructionSlides = [
     instruction1,
@@ -58,6 +59,7 @@ const partners = [
 const LandingPage: React.FC = () => {
     const { isMobile } = useDeviceType();
     const { t } = useTranslate();
+    const navigate = useNavigate();
     const currentUser = useSelector(selectCurrentUser);
     const [instructionSlide, setInstructionSlide] = useState<number>(0);
     return (
@@ -68,7 +70,7 @@ const LandingPage: React.FC = () => {
                     <PrimaryContainer direction="column" contentAlignment="left" contentJustify="left" additionalClassess={styles.halfScreenDesktop}>
                         <p className={commonStyles.basicHeader}>{t("landing-page.header1")}</p>
                         {
-                            !currentUser && <PrimaryButton color="violet" gradient={true} increaseHorizontalPadding={true} additionalClasses={styles.loginBtn} animated={true} >{t("landing-page.buttons.login")}</PrimaryButton>
+                            !currentUser && <PrimaryButton color="violet" gradient={true} increaseHorizontalPadding={true} additionalClasses={styles.loginBtn} animated={true} onClick={() => navigate(constantsUrls.LandingPage.signIn)}>{t("landing-page.buttons.login")}</PrimaryButton>
                         }
                     </PrimaryContainer>
                         <img src={img1} alt="main page" className={`${styles.halfScreenDesktop} ${styles.landingPageImg}`}/>

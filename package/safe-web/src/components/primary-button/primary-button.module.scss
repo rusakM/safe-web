@@ -94,6 +94,13 @@
 
 .white {
     background-color: colors.$glass80;
+    border-color: colors.$grey-light-border;
+
+    &.gradient {
+        background-image: 
+            linear-gradient(to left, colors.$glass6, colors.$glass4), 
+            linear-gradient(to left, colors.$glass4, colors.$glass);
+    }
 }
 
 .gradient {
