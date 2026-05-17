@@ -1,0 +1,80 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+
+.img {
+    @media (min-width: breakpoints.$desktop) {
+        padding-top: 2.5em;
+    }
+}
+
+.nameInputContainer {
+    padding-right: 5px;
+}
+
+.surnameInputContainer {
+    padding-left: 5px;
+}
+
+.label {
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 1.5em !important;
+    padding-bottom: 2px !important;
+    font-family: fonts.$lato, sans-serif;
+}
+
+.labelFirst {
+    padding-top: 0 !important;
+}
+
+.header {
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 2em !important;
+    padding-bottom: 0.25em !important;
+}
+
+.switchContainer {
+    min-height: 100px;
+    padding-top: 0.75em;
+    padding-bottom: 1.5em;
+
+    @media (min-width: breakpoints.$desktop) {
+        padding-top: 1em;
+        min-height: 150px;
+        padding-bottom: 2em;
+    }
+}
+
+.deleteSection {
+    @media (min-width: breakpoints.$desktop) {
+        max-width: 600px;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.popupImg {
+    padding: 1em 2em;
+    max-width: 150px;
+
+    @media (min-width: breakpoints.$desktop) {
+        max-width: 250px;
+        padding: 1em 3em;
+    }
+}
+
+.violetBackground {
+    position: fixed;
+    top: 0;
+    height: breakpoints.$max-height;
+    width: 50%;
+    left: 0;
+    z-index: -1;
+    display: block;
+    background-color: colors.$violet-dark;
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+    background: radial-gradient(ellipse at center, colors.$violet-light 44%, colors.$violet-dark 100%);
+}

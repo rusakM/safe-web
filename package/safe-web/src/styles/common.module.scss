@@ -24,7 +24,11 @@
 }
 
 .blueText {
-    color: colors.$links;
+    color: colors.$links !important;
+}
+
+.redText {
+    color: colors.$red-button !important;
 }
 
 .basicLineHeight {

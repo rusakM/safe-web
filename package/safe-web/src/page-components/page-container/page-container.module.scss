@@ -1,14 +1,7 @@
 @use "@styles/breakpoints.scss";
 
 .pageContainer {
-    display: flex;
-    flex-direction: column;
-    min-height: breakpoints.$max-height;
-    width: 100%;
-}
-
-.content {
-    flex: 1;
-    margin: 0;
-    padding: 0;
+    position: relative;
+    z-index: 1;
+    height: 100%;
 }

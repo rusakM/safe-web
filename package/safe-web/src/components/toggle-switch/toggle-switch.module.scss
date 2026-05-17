@@ -1,0 +1,65 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+@use "@styles/mixins.scss";
+
+.toggleContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .toggleLabel {
+        color: colors.$glass;
+        font-size: 14px;
+        font-family: fonts.$lato, sans-serif;
+        
+        @media (min-width: breakpoints.$desktop) {
+            font-size: 20px;
+        }
+    }
+}
+
+.toggleSwitch {
+    width: 58px;
+    height: 26px;
+    border-radius: 30px;
+    border: 1px solid colors.$grey-border;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease-in-out;
+    @include mixins.basicGradient();
+
+    .toggleCircle {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 2px;
+        left: 2px;
+        background-color: white;
+        border-radius: 50%;
+        border: 1px solid colors.$grey-border;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    &.on .toggleCircle {
+        transform: translateX(32px);
+        background-color: colors.$grey-border;
+    }
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 90px;
+        height: 40px;
+        border-radius: 48px;
+
+        .toggleCircle {
+            top: 5px;
+            left: 5px;
+            width: 28px;
+            height: 28px;
+        }
+
+        &.on .toggleCircle {
+            transform: translateX(48px);
+        }
+    }
+}

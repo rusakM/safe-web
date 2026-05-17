@@ -9,19 +9,20 @@ import RedirectAfterLogin from "./components/redirect-after-login/redirect-after
 import LandingPage from "./pages/landing-page/landing-page";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "./redux/user/user.selectors";
-//import { checkCurrentUser } from "./helpers/events.functions";
+import { checkCurrentUser } from "./helpers/events.functions";
 
 const Confirm = lazy(() => import("./pages/confirm/confirm"));
 const FillRegisterData = lazy(() => import("./pages/fill-register-data/fill-register-data"));
 const SignUp = lazy(() => import("./pages/sign-up/sign-up"));
 const SignIn = lazy(() => import("./pages/sign-in/sign-in"));
+const EditProfile = lazy(() => import("./pages/edit-profile/edit-profile"));
 
 function App() {
     const tolgee = useTolgee(["language"]);
     const currentUser = useSelector(selectCurrentUser);
 
     return (
-        <div lang={tolgee.getLanguage()}>
+        <div lang={tolgee.getLanguage()} className="app">
             <RootContainer>
                 <Routes>
                     <Route element={<LandingPage />} path={constantsUrls.LandingPage.main} />
@@ -32,6 +33,11 @@ function App() {
                         ? <Navigate to={constantsUrls.LandingPage.main } replace={true} />
                         : <FillRegisterData /> } 
                         path={constantsUrls.LandingPage.fillRegisterData}
+                    />
+                    <Route element={checkCurrentUser(currentUser) 
+                        ? <EditProfile /> 
+                        : <Navigate to={constantsUrls.LandingPage.main} replace={true} />}
+                        path={constantsUrls.Main.myProfile} 
                     />
                 </Routes>
             </RootContainer>
