@@ -1,0 +1,58 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+
+.cardContainer {
+    position: relative;
+    width: 90vw;
+    background-color: transparent;
+    max-width: 360px;
+    min-height: 500px;
+
+    & > div:not(.cardButtonsContainer) {
+        min-height: 475px !important;
+        width: 100% !important;
+    }
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 31%;
+    }
+
+}
+
+.cardImageContainer {
+    position: relative;
+    height: 50%;
+    margin: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.noImage {
+    background-color: transparent;
+}
+
+.defaultCardImage {
+    width: 50%;
+    padding: 2em 0;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 0.5em;
+}
+
+.cardButtonsContainer {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit !important;
+    padding: 0.5em;
+    bottom: 36px;
+}

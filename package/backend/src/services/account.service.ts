@@ -49,7 +49,6 @@ export namespace helpers {
             firstName: user.firstName,
             lastName: user.lastName,
             rodoAgreement: user.rodoAgreement,
-            role: user.role,
             userInterfaceLanguage: user.userInterfaceLanguage,
         };
 

@@ -42,13 +42,10 @@ function retractRequestToken(request: any): string {
 
 function processValidateAuthenticatedRequest(errorCode: number, request: any, response: any, next: any, options?: any) {
     request.params.userId = undefined;
-    request.params.role = undefined;
 
     try {
         const payload = validateTokenAndGetPayload(retractRequestToken(request), options);
         request.params.userId = payload.id;
-        request.params.role = payload.role;
-
         correlationContext.setUserId(request.params.userId);
 
         next();
@@ -109,23 +106,5 @@ export namespace security {
         processValidateAuthenticatedRequest(403, request, response, next, {
             ignoreExpiration: true,
         });
-    }
-
-    export function validateStudentRequest(request: any, response: any, next: any) {
-        if (request.params.role === ConstantsGlobal.Account.ROLES_ENUM.STUDENT) {
-            next();
-        } else {
-            response.status(403);
-            response.json({ error: 'Insufficient priviledge.' });
-        }
-    }
-
-    export function validateTeacherRequest(request: any, response: any, next: any) {
-        if (request.params.role === ConstantsGlobal.Account.ROLES_ENUM.TEACHER) {
-            next();
-        } else {
-            response.status(403);
-            response.json({ error: 'Insufficient priviledge.' });
-        }
     }
 }

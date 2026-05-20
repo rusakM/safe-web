@@ -8,7 +8,7 @@ import * as accountValidation from '../middlewares/validators/userAuth';
 
 import { accountService, mailService } from '../services';
 
-import { ConstantsGlobal } from '../core/constants';
+import { ConstantsCountries, ConstantsGlobal } from '../core/constants';
 import * as errorsAdapter from '../core/errorAdapter';
 import { IAccount } from '../models/Account';
 
@@ -24,6 +24,8 @@ async function register(req: Request, res: Response) {
 
         const newUser: accountService.Model.IAccount = {
             ...userData,
+            countryCode: userData?.countryCode ?? ConstantsCountries._Enum.PL,
+            userInterfaceLanguage: userData?.userInterfaceLanguage ?? ConstantsGlobal.App.USER_INTERFACE_LANGUAGES.en,
             lastSeenAt: new Date().toISOString(),
             latestUserAgentData: req.headers['user-agent'],
             email: userData.email.toLowerCase(),
@@ -87,15 +89,14 @@ async function confirm(req: Request, res: Response) {
         user = await accountService.DB.update(user._id, { confirmed: true });
     }
 
-    const token = security.generateSpecificToken({ id: user._id, role: user.role }, '7d');
+    const token = security.generateSpecificToken({ id: user._id }, '7d');
     return appResponse.prepareJsonResponse(res, { token, user: accountService.helpers.secureOutput(user) });
 }
 
 function refreshToken(req: Request, res: Response) {
     const userId = req.params.userId?.toString();
-    const role = req.params.role?.toString();
-    if (userId && role) {
-        const token = security.generateSpecificToken({ id: userId, role }, '7d');
+    if (userId) {
+        const token = security.generateSpecificToken({ id: userId }, '7d');
         return appResponse.prepareJsonResponse(res, { token });
     }
     throw errorsAdapter.Global.createError(errorsAdapter.Global.ErrorsEnum.INCORRECT_TOKEN_PAYLOAD);

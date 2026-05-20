@@ -1,0 +1,9 @@
+@use "@styles/breakpoints.scss";
+
+.materialsContainer {
+    padding-top: 80px;
+
+    @media (min-width: breakpoints.$desktop) {
+       padding-top: 180px; 
+    }
+}

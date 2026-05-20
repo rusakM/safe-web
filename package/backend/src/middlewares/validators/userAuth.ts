@@ -23,7 +23,6 @@ export const validateRegister = (req: Request, res: Response, next: NextFunction
         firstName: accountValidators.firstName,
         lastName: accountValidators.lastName,
         rodoAgreement: accountValidators.rodoAgreement,
-        role: accountValidators.role,
         userInterfaceLanguage: accountValidators.userInterfaceLanguage,
     });
 

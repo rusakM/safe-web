@@ -22,14 +22,13 @@ export interface IAccountBasic {
     lastSeenAt?: string;
     latestFailedLoginAt?: string;
     latestUserAgentData?: string;
-    role?: ConstantsGlobal.Account.ROLES_ENUM;
     rodoAgreement?: boolean;
     userInterfaceLanguage?: ConstantsGlobal.App.USER_INTERFACE_LANGUAGES;
     verificationCodes?: IVerificationCodes[];
 }
 export interface IAccount extends IAccountBasic, SchemasGlobal.Schemas.IDocument {}
 export interface IDBAccount extends IAccountBasic, Document {}
-export type TBasicAccount = Pick<IAccount, '_id' | 'email' | 'firstName' | 'lastName' | 'role'>;
+export type TBasicAccount = Pick<IAccount, '_id' | 'email' | 'firstName' | 'lastName'>;
 
 export interface SecuredAccount {
     cookiesAgreement: IAccount['cookiesAgreement'];
@@ -38,7 +37,6 @@ export interface SecuredAccount {
     _id: IAccount['_id'];
     firstName: IAccount['firstName'];
     lastName: IAccount['lastName'];
-    role: IAccount['role'];
     rodoAgreement: IAccount['rodoAgreement'];
     userInterfaceLanguage: IAccount['userInterfaceLanguage'];
 }
@@ -56,10 +54,6 @@ export const accountValidators = {
     lastName: Joi.string().allow('').optional(),
     lastSeenAt: Joi.string().optional(),
     rodoAgreement: Joi.boolean().default(false).optional(),
-    role: Joi.string()
-        .equal(...Object.values(ConstantsGlobal.Account.ROLES_ENUM))
-        .default(ConstantsGlobal.Account.ROLES_ENUM.STUDENT)
-        .optional(),
     userInterfaceLanguage: Joi.string()
         .equal(...Object.values(ConstantsGlobal.App.USER_INTERFACE_LANGUAGES))
         .allow('', null)
@@ -115,11 +109,6 @@ const AccountSchema = new Schema<IDBAccount>(
             type: Boolean,
             default: false,
             validate: (val) => SchemasGlobal.Validators.schemaValidator(accountValidators.rodoAgreement, val),
-        },
-        role: {
-            type: String,
-            enum: Object.values(ConstantsGlobal.Account.ROLES_ENUM),
-            validate: (val) => SchemasGlobal.Validators.schemaValidator(accountValidators.role, val),
         },
         userInterfaceLanguage: {
             type: String,
