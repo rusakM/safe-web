@@ -16,6 +16,7 @@ export const LandingPage = {
 };
 
 export const Main = {
+    courses: "/courses",
     game: "/game",
     startLessons: "/lessons",
     lobby: "/lobby",

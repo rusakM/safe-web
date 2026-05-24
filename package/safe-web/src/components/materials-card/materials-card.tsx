@@ -40,8 +40,6 @@ const MaterialsCard: React.FC<IMaterialsCard> = ({ description, downloadAction, 
                 </PrimaryButton>
             </div>
         </div>
-
-        
     );
 };
 

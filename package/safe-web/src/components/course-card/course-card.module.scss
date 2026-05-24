@@ -1,0 +1,102 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/mixins.scss";
+
+$min-desktop-height: 260px;
+
+.cardContainer {
+    width: 100%;
+    background-color: transparent;
+
+    @media (min-width: breakpoints.$desktop) {
+        min-height: $min-desktop-height;
+        max-height: 530px;
+    }
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    background-color: colors.$grey;
+    color: colors.$white;
+    @include mixins.basicGradient();
+    border: 2px solid colors.$grey-border;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    box-sizing: border-box;
+
+
+    @media (min-width: breakpoints.$desktop) {
+        flex-direction: row;
+        min-height: $min-desktop-height;
+    }
+}
+
+.cardImageContainer {
+    height: 45%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: colors.$violet-dark;
+    background: radial-gradient(ellipse at center, colors.$violet-light 44%, colors.$violet-dark 100%);
+    border-radius: 10px;
+    box-sizing: border-box;
+
+    & > img {
+        width: 100%;
+        height: 100%;
+        padding: 1em;
+        position: relative;
+    }
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 440px;
+        min-height: $min-desktop-height;
+    }
+}
+
+.cardInfoContainer {
+    @media (max-width: breakpoints.$desktop) {
+        padding-top: 0;
+        position: relative;
+        top: -10px;
+    }
+}
+
+.badge {
+    @media (max-width: breakpoints.$desktop) {
+        top: -35px;
+        position: relative;
+        color: colors.$violet-dark;
+        opacity: 1;
+        background-color: white;
+        text-transform: none;
+        padding: 8px 16px;
+        border-color: white;
+        -webkit-box-shadow: inset 0px 0px 5px 2px rgba(0,0,0,0.4); 
+        box-shadow: inset 0px 0px 5px 2px rgba(0,0,0,0.4);
+        border-width: 0;
+    }
+}
+
+.description {
+    padding-bottom: 1em;
+
+    @media (min-width: breakpoints.$desktop) {
+        padding-bottom: 1.5em;
+    }
+}
+
+.button {
+    padding: 8px 16px;
+    border-color: colors.$violet-dark;
+    @media (min-width: breakpoints.$desktop) {
+        padding: 12px 18px;
+    }
+}

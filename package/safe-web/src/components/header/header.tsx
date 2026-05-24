@@ -129,7 +129,7 @@ const Header: React.FC = () => {
     const selectMenuAction = (action: MENU_ACTIONS) => {
         switch(action) {
             case MENU_ACTIONS.COURSE:
-                navigate(constantsUrls.Main.startLessons);
+                navigate(constantsUrls.Main.courses);
                 break;
             case MENU_ACTIONS.MAIN_PAGE:
                 navigateToMainPage();
