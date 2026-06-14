@@ -50,7 +50,7 @@ const FillRegisterData: React.FC = () => {
         firstName: "",
         lastName: "",
         rodoAgreement: true,
-        userInterfaceLanguage: getCurrentLocale() || "en"
+        userInterfaceLanguage: getCurrentLocale()
     })
 
     const [validateRegisterForm, setValidateRegisterForm] = useState({

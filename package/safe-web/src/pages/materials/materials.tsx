@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslate } from '@tolgee/react';
 
 import PageContainer from '../../page-components/page-container/page-container';
@@ -20,6 +20,13 @@ import OnlineThreats1 from '../../assets/courses/online_threats1.svg';
 import OnlineThreats2 from '../../assets/courses/online_threats2.svg';
 import WebSecurely from '../../assets/courses/web_securely.svg';
 import HistoryCybersecurity from '../../assets/courses/history_cybersecurity.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectMaterials } from '../../redux/materials/materials.selectors';
+import { fetchMaterialsStart } from '../../redux/materials/materials.actions';
+import type { IMaterial } from '../../types/material';
+import { downloadFile } from '../../helpers/events.functions';
+import { getMaterialUrl } from '../../helpers/materials.functions';
+import { Flipbook } from '../../page-components/flipbook/flipbook';
 
 type TMaterial = {img: string, name: string};
 const materials: TMaterial[] = [
@@ -56,6 +63,19 @@ const materials: TMaterial[] = [
 const Materials: React.FC = () => {
 	const { t } = useTranslate();
 	const { isMobile } = useDeviceType();
+	const dispatch = useDispatch();
+	const materialsFiles = useSelector(selectMaterials);
+	const [materialsViewerVisible, setMaterialsViewerVisible] = useState<boolean>(false);
+	const [currentVisibleMaterial, setCurrentVisibleMaterial] = useState<IMaterial | null>(null);
+
+	const isMaterialsFetching = useRef(false);
+
+	useEffect(() => {
+		if (materialsFiles?.length || isMaterialsFetching.current) return;
+
+		isMaterialsFetching.current = true;
+		dispatch(fetchMaterialsStart());
+	}, [materialsFiles]);
 
 	const prepareRows = (arr: TMaterial[]): TMaterial[][] => {
 		if (isMobile) return arr.map(item => [item]);
@@ -71,7 +91,11 @@ const Materials: React.FC = () => {
 		}
 
 		return temp;
+	}
 
+	const closeFlipbook = () => {
+		setCurrentVisibleMaterial(null);
+		setMaterialsViewerVisible(false);
 	}
  
 	return (
@@ -100,21 +124,34 @@ const Materials: React.FC = () => {
 					{
 						prepareRows(materials).map((row, index) => (<PrimaryContainer direction="row" key={`manuals-row-${index}`} additionalClassess={commonStyles.basicGap}>
 							{
-								row.map((item, index2) => (
+								row.map((item, index2) => {
+									const materialFromDb = materialsFiles?.find(({ materialNumber }) => materialNumber === index2 + 1);
+									return (
 									 <MaterialsCard 
 										key={`card-${(index * 3) + index2 + 1}`}
 										header={t(`landing-page.carousel.${item.name}`)}
 										description={t(`landing-page.carousel.${item.name}.description`)}
 										picture={item.img}
+										downloadAction={() => {
+											if (!materialFromDb) return;
+											downloadFile(getMaterialUrl(materialFromDb))
+										}}
+										resizeAction={() => {
+											if (!materialFromDb) return;
+											setCurrentVisibleMaterial(materialFromDb);
+											setMaterialsViewerVisible(true);
+										}}
 									/>
-								))
+								)})
 							}
 						</PrimaryContainer>))
 					}
 				</PrimaryContainer>
 			</PrimaryContainer> 
 			</PrimaryContainer>
-			
+			{
+				materialsViewerVisible && currentVisibleMaterial && <Flipbook material={currentVisibleMaterial} onClose={closeFlipbook} />
+			}
 		</PageContainer>
 	);
 };

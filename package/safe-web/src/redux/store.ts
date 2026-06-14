@@ -6,7 +6,8 @@ import rootReducer from "./root-reducer";
 import rootSaga from "./root-saga";
 
 const sagaMiddleware = createSagaMiddleware();
-const rememberedKeys = ["user"];
+const rememberedKeysLocalStorage = ["user"];
+const rememberedKeysSessionStorage = ["materials"];
 const logger = createLogger({
 	collapsed: true,
 	diff: true,
@@ -21,7 +22,8 @@ export const store = configureStore({
         ),
     enhancers: (getDefaultEnhancers) =>
         getDefaultEnhancers().concat(
-            rememberEnhancer(window.localStorage, rememberedKeys)
+            rememberEnhancer(window.localStorage, rememberedKeysLocalStorage),
+            rememberEnhancer(window.sessionStorage, rememberedKeysSessionStorage)
         ),
     devTools: process.env.NODE_ENV === "development",
 });

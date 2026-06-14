@@ -14,6 +14,7 @@ export namespace Main {
     export const APP_MODE: string = process.env.APP_MODE;
     export const JWT_SECRET: string = process.env.JWT_SECRET;
     export const ALLOWED_ORIGINS: string = process.env.ALLOWED_ORIGINS;
+    export const CDN_LOCATION: string = process.env.CDN_LOCATION;
 }
 
 export namespace Email {

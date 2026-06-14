@@ -80,8 +80,8 @@ interface IFindMethods<IModel, TIndexes extends string> {
      * @returns An array of matching documents.
      */
     byIndex: {
-        (key: TIndexes, value: string, limit: 1): Promise<IModel | null>;
-        (key: TIndexes, value: string, limit?: number): Promise<IModel[] | null>;
+        (key: TIndexes, value: string | number, limit: 1): Promise<IModel | null>;
+        (key: TIndexes, value: string | number, limit?: number): Promise<IModel[] | null>;
     };
 
     /**
@@ -208,7 +208,7 @@ export class DbConnector<IDBModel extends Document, IModel extends SchemasGlobal
             }
         },
         //@ts-ignore
-        byIndex: async (key: TIndexes, value: string, limit: number = 0) => {
+        byIndex: async (key: TIndexes, value: string | number, limit: number = 0) => {
             try {
                 if (!value) throw new Error(`Value "${value}" for ${key} is required.`);
                 const filter: QueryFilter<IDBModel> = { [key]: value } as QueryFilter<IDBModel>;

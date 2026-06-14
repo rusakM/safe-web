@@ -40,6 +40,9 @@ export namespace appRoute {
                 test: '/',
                 status: '/status',
             },
+            materials: {
+                get: `${servicesPrefix.api}/materials`,
+            },
             user: {
                 auth: {
                     confirm: `${servicesPrefix.api}/user/auth/confirm`,

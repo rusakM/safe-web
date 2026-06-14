@@ -1,4 +1,5 @@
 import { readFile, access, constants } from 'node:fs/promises';
+import { EncodingOption } from 'node:fs';
 
 export async function checkExist(location: string): Promise<boolean> {
     return await access(location, constants.R_OK)
@@ -6,10 +7,10 @@ export async function checkExist(location: string): Promise<boolean> {
         .catch(() => false);
 }
 
-export async function read(location: string): Promise<string> {
+export async function read(location: string, encoding: EncodingOption = 'utf-8'): Promise<string | Buffer<ArrayBuffer>> {
     try {
         if (await checkExist(location)) {
-            return await readFile(location, 'utf-8');
+            return await readFile(location, encoding);
         }
         return null;
     } catch {

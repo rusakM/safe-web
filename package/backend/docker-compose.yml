@@ -14,6 +14,7 @@ services:
         volumes:
             - .:/usr/src/app
             - ${TOLGEE_CATALOG}:${TOLGEE_CATALOG}
+            - ${CDN_LOCATION}/handbooks:${CDN_LOCATION}/handbooks
         depends_on:
             - redis
         networks:

@@ -108,6 +108,7 @@ export namespace Game {
 export namespace Global {
     export enum ErrorsEnum {
         ACCOUNT_TEMPORARILY_BLOCKED,
+        ASSET_NOT_FOUND,
         INVALID_EMAIL_OR_PASSWORD,
         INVALID_PASSWORD,
         USER_NOT_FOUND,
@@ -127,6 +128,12 @@ export namespace Global {
             name: ErrorsEnum[ErrorsEnum.ACCOUNT_TEMPORARILY_BLOCKED],
             httpCode: 401,
             message: 'Account temporarily blocked.',
+            type: ErrorTypesEnum[ErrorTypesEnum.Error],
+        },
+        [ErrorsEnum.ASSET_NOT_FOUND]: {
+            name: ErrorsEnum[ErrorsEnum.ASSET_NOT_FOUND],
+            httpCode: 404,
+            message: 'Asset not found.',
             type: ErrorTypesEnum[ErrorTypesEnum.Error],
         },
         [ErrorsEnum.INVALID_EMAIL_OR_PASSWORD]: {

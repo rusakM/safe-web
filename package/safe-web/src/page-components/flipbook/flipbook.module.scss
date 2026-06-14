@@ -1,0 +1,126 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+
+.overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 6;
+
+	.modal {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		background: var(--color-surface, #1e1e1e);
+		border-radius: 0;
+
+		@media (min-width: breakpoints.$desktop) {
+			width: 90%;
+			height: 90%;
+			border-radius: 8px;
+            -webkit-box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.9); 
+            box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.9);
+		}
+	}
+}
+
+.toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 16px;
+	flex-shrink: 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.toolbarLeft,
+.toolbarCenter,
+.toolbarRight {
+	display: flex;
+	align-items: center;
+}
+
+.toolbarLeft,
+.toolbarRight {
+    gap: 6px;
+
+    @media (min-width: breakpoints.$desktop) {
+        gap: 18px;
+    }
+}
+
+
+
+.toolbarCenter {
+	gap: 8px;
+}
+
+.iconBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 5px;
+	background: transparent;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.15s ease;
+
+	img {
+		width: 32px;
+		height: 32px;
+		display: block;
+
+        @media (min-width: breakpoints.$desktop) {
+            width: 40px;
+		    height: 40px;
+        }
+	}
+
+	&:hover:not(:disabled) {
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	&:disabled {
+		opacity: 0.3;
+		cursor: default;
+	}
+}
+
+.pageIndicator {
+	min-width: 60px;
+	text-align: center;
+	user-select: none;
+}
+
+.viewer {
+	flex: 1;
+	overflow: auto;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 12px 0;
+
+	@media (min-width: breakpoints.$desktop) {
+		padding: 24px;
+	}
+
+	:global(.react-pdf__Document) {
+		display: flex;
+		justify-content: center;
+	}
+}
+
+.status {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+	opacity: 0.5;
+}

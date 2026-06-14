@@ -1,13 +1,14 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "module": "ESNext",
+        "module": "nodenext",
         "outDir": "./dist",
         "esModuleInterop": true,
         "sourceMap": true,
         "rootDir": "./src",
         "isolatedModules": true,
         "allowSyntheticDefaultImports": true,
+        "moduleResolution": "nodenext",
         "resolveJsonModule": true,
         "noImplicitAny": true,
         "strictBindCallApply": false,

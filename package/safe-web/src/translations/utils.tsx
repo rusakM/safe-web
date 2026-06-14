@@ -1,6 +1,8 @@
 import React from "react";
+import { LocalesEnum } from "../helpers/constants/translations";
 
-export const getCurrentLocale = (): string => localStorage.getItem("locale") ?? "";
+export const getCurrentLocale = (): LocalesEnum =>
+    localStorage.getItem('locale') as LocalesEnum ?? LocalesEnum.en;
 
 export const formatNewLines = (text: string) => (
     <>
