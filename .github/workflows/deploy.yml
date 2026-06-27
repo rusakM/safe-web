@@ -1,0 +1,32 @@
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - test
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null" > ~/.ssh/config
+
+      - name: safe-web-deployment
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/test" ]; then
+            echo "Wdrażam na serwer testowy"
+            ssh -i ~/.ssh/deploy_key -t ${{ secrets.DEPLOYMENT_USR }}@${{ secrets.DEPLOYMENT_SRV }} -p ${{ secrets.DEPLOYMENT_PORT }} "cd ~/safe-web/test/safe-web && git pull && ./deploy.sh --env TEST --authkey ${{secrets.TOLGEE_API_KEY}}"
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "Wdrażam na serwer produkcyjny"
+            ssh -i ~/.ssh/deploy_key -t ${{ secrets.DEPLOYMENT_USR }}@${{ secrets.DEPLOYMENT_SRV }} -p ${{ secrets.DEPLOYMENT_PORT }} "cd ~/safe-web/prod/safe-web && git pull && ./deploy.sh --env PROD --authkey ${{secrets.TOLGEE_API_KEY}}"
+          fi

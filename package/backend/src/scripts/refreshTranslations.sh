@@ -59,7 +59,7 @@ fetch_translations() {
 		--show-error \
 		--location \
 		--max-time 60 \
-		'https://pgtranslate.toadres.pl/v2/projects/34/export?format=JSON' \
+		'https://swtranslate.toadres.pl/v2/projects/2/export?format=JSON' \
 		--header "Accept: application/json" \
 		--header "x-api-key: $AUTHKEY" \
 		-o "$TRANSLATIONS_ZIP"; then
