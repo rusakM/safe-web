@@ -40,6 +40,12 @@ export namespace appRoute {
                 test: '/',
                 status: '/status',
             },
+            course: {
+                get: '/course/:courseId',
+                getPlayerStats: '/course/stats',
+                getPlayerCourse: '/course/:courseId/stats',
+                sendAnswer: '/course/:courseId/answer',
+            },
             materials: {
                 get: `${servicesPrefix.api}/materials`,
             },

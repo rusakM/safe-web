@@ -55,51 +55,44 @@ export namespace Core {
     }
 }
 
-export namespace Game {
+export namespace Course {
     export enum ErrorsEnum {
-        GAME_NOT_FOUND,
-        GAME_NOT_STARTED,
-        LESSON_NOT_FOUND,
-        PLAYER_GAME_NOT_FOUND,
-        TOO_LITTLE_PLAYERS_LIST,
+        COURSE_NOT_FOUND,
+        MODULE_NOT_FOUND,
+        PLAYER_COURSE_NOT_FOUND,
+        QUESTION_NOT_FOUND,
     }
 
-    export const Game: { [key: string]: IError } = {
-        [ErrorsEnum.GAME_NOT_FOUND]: {
-            name: ErrorsEnum[ErrorsEnum.GAME_NOT_FOUND],
+    export const Course: { [key: string]: IError } = {
+        [ErrorsEnum.COURSE_NOT_FOUND]: {
+            name: ErrorsEnum[ErrorsEnum.COURSE_NOT_FOUND],
             httpCode: 404,
             message: 'Game not found',
             type: ErrorTypesEnum[ErrorTypesEnum.Error],
         },
-        [ErrorsEnum.GAME_NOT_STARTED]: {
-            name: ErrorsEnum[ErrorsEnum.GAME_NOT_STARTED],
-            httpCode: 422,
-            message: 'Game has not been started.',
-            type: ErrorTypesEnum[ErrorTypesEnum.Error],
-        },
-        [ErrorsEnum.LESSON_NOT_FOUND]: {
-            name: ErrorsEnum[ErrorsEnum.LESSON_NOT_FOUND],
+        [ErrorsEnum.MODULE_NOT_FOUND]: {
+            name: ErrorsEnum[ErrorsEnum.MODULE_NOT_FOUND],
             httpCode: 404,
-            message: 'Lesson not found',
+            message: 'Module not found',
             type: ErrorTypesEnum[ErrorTypesEnum.Error],
         },
-        [ErrorsEnum.PLAYER_GAME_NOT_FOUND]: {
-            name: ErrorsEnum[ErrorsEnum.PLAYER_GAME_NOT_FOUND],
+        [ErrorsEnum.PLAYER_COURSE_NOT_FOUND]: {
+            name: ErrorsEnum[ErrorsEnum.PLAYER_COURSE_NOT_FOUND],
             httpCode: 404,
-            message: 'Player game not found.',
+            message: 'Player course not found.',
             type: ErrorTypesEnum[ErrorTypesEnum.Error],
         },
-        [ErrorsEnum.TOO_LITTLE_PLAYERS_LIST]: {
-            name: ErrorsEnum[ErrorsEnum.TOO_LITTLE_PLAYERS_LIST],
-            httpCode: 422,
-            message: 'Not enough players to start game.',
+        [ErrorsEnum.QUESTION_NOT_FOUND]: {
+            name: ErrorsEnum[ErrorsEnum.QUESTION_NOT_FOUND],
+            httpCode: 404,
+            message: 'Question not found.',
             type: ErrorTypesEnum[ErrorTypesEnum.Error],
         },
     };
 
     export function createError(errosEnum: ErrorsEnum, data?: Record<string, unknown>) {
         return new ApiError({
-            ...Game[errosEnum],
+            ...Course[errosEnum],
             ...(data && { data }),
         });
     }
