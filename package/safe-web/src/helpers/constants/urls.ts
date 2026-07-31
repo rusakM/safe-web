@@ -6,6 +6,13 @@ export const Footer = {
     youtube: "https://www.youtube.com/@PlanetGoals-SDGs",
 };
 
+export const Course = {
+    get: (courseId: string) => `/course/${courseId}`,
+    getPlayerCourse: (courseId: string) => `/course/${courseId}/stats`,
+    getPlayerStats: "/course/stats",
+    sendAnswer: (courseId: string) => `/course/${courseId}/answer`,
+};
+
 export const LandingPage = {
     blog: "https://safeweb.um.si/",
     confirm: "/confirm",
