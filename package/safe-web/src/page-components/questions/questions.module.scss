@@ -1,0 +1,68 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+
+.questionContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+
+    @media (min-width: breakpoints.$desktop) {
+        gap: 18px;
+    }
+}
+
+.questionTitle {
+    font-family: fonts.$lato, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+    color: colors.$white;
+    margin: 0;
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 24px;
+        line-height: 28px;
+    }
+}
+
+// Single choose (scale 1-10)
+.scaleGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    width: 100%;
+
+    @media (min-width: breakpoints.$desktop) {
+        grid-template-columns: repeat(10, 1fr);
+        gap: 24px;
+    }
+}
+
+// Options grid for 1 z 4 / multi choose / true-false
+.optionsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+
+    @media (min-width: breakpoints.$desktop) {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+}
+
+// Fit tiles (large tiles layout)
+.tilesGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+
+    @media (min-width: breakpoints.$desktop) {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+    }
+}

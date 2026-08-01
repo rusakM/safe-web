@@ -1,4 +1,9 @@
-import * as constantsUrls from "./urls";
+import * as constantsCourse from "./course";
 import * as constantsTranslations from "./translations";
+import * as constantsUrls from "./urls";
 
-export { constantsUrls, constantsTranslations };
+export { 
+    constantsCourse,
+    constantsTranslations,
+    constantsUrls, 
+};

@@ -18,6 +18,7 @@ const SignIn = lazy(() => import("./pages/sign-in/sign-in"));
 const EditProfile = lazy(() => import("./pages/edit-profile/edit-profile"));
 const Materials = lazy(() => import("./pages/materials/materials"));
 const Courses = lazy(() => import("./pages/courses/courses"));
+const CourseSummary = lazy(() => import("./pages/course-summary/course-summary"));
 
 function App() {
     const tolgee = useTolgee(["language"]);
@@ -50,6 +51,11 @@ function App() {
                         ? <Courses/>
                         : <Navigate to={constantsUrls.LandingPage.main} replace={true} />}
                         path={constantsUrls.Main.courses}
+                    />
+                    <Route element={checkCurrentUser(currentUser)
+                        ? <CourseSummary/>
+                        : <Navigate to={constantsUrls.LandingPage.main} replace={true} />}
+                        path={constantsUrls.Main.courseSummary}
                     />
                 </Routes>
             </RootContainer>

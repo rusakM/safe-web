@@ -1,7 +1,8 @@
+import { constantsCourse } from "../helpers/constants";
 export interface IQuestionMedia {
     name?: string;
     url?: string;
-    type?: string;
+    type?: constantsCourse.QUESTION_MEDIA_TYPES_ENUM;
 }
 
 export interface IQuestion {
@@ -13,7 +14,7 @@ export interface IQuestion {
     media?: IQuestionMedia[];
     question?: string;
     questionNumber?: number;
-    type?: string;
+    type?: constantsCourse.TYPES_ENUM;
 }
 
 export interface IModule {

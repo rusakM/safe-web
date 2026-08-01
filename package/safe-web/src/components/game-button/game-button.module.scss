@@ -1,0 +1,138 @@
+@use "sass:color";
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+
+.gameButton {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-family: fonts.$lato, sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    user-select: none;
+    text-transform: uppercase;
+    text-align: center;
+    box-sizing: border-box;
+    color: colors.$white;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+}
+
+// Sizes / Types (Mobile-First base, Desktop in Media Queries)
+.scale {
+    width: 68px;
+    height: 44px;
+    font-size: 20px;
+    border-radius: 4px;
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 100px;
+        height: 60px;
+        font-size: 24px;
+    }
+}
+
+.standard {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 8px;
+
+    @media (min-width: breakpoints.$desktop) {
+        min-height: 60px;
+        padding: 18px 20px;
+        font-size: 20px;
+        border-radius: 10px;
+    }
+}
+
+.tile {
+    width: 100%;
+    min-height: 80px;
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 8px;
+
+    @media (min-width: breakpoints.$desktop) {
+        min-height: 120px;
+        padding: 24px;
+        font-size: 20px;
+        border-radius: 12px;
+    }
+}
+
+// Colors & States
+.grey {
+    background-color: colors.$grey;
+    color: colors.$white;
+    border-color: colors.$grey-border;
+
+    &:hover:not(:disabled) {
+        background-color: color.adjust(colors.$grey, $lightness: 8%);
+    }
+}
+
+.glass {
+    background: linear-gradient(46deg, rgba(231, 231, 231, 0.24) 0%, rgba(231, 231, 231, 0.16) 100%);
+    border-color: colors.$grey-light-border;
+    color: colors.$white;
+}
+
+.violet {
+    background-color: colors.$violet-dark;
+    color: colors.$white;
+    border-color: colors.$violet-border;
+}
+
+.correct {
+    background-color: colors.$correct-answer;
+    color: colors.$white;
+    border-color: color.adjust(colors.$correct-answer, $lightness: 10%);
+}
+
+.incorrect {
+    background-color: colors.$red-button;
+    color: colors.$white;
+    border-color: colors.$red-button-hover;
+}
+
+.selected {
+    background-color: colors.$violet-dark !important;
+    border-color: colors.$violet-border !important;
+    color: colors.$white !important;
+}
+
+// Number badge (for tiles or numbered buttons)
+.numberBadge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: colors.$white;
+
+    @media (min-width: breakpoints.$desktop) {
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+}

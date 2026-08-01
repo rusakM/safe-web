@@ -24,6 +24,7 @@ export const LandingPage = {
 
 export const Main = {
     courses: "/courses",
+    courseSummary: "/course-summary/:courseId?",
     game: "/game",
     startLessons: "/lessons",
     lobby: "/lobby",
