@@ -1,0 +1,77 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    padding: 24px 16px;
+    box-sizing: border-box;
+
+    @media (min-width: breakpoints.$desktop) {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 24px;
+    }
+}
+
+.nodeItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+.hexagonWrapper {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(46deg, rgba(231, 231, 231, 0.24) 0%, rgba(231, 231, 231, 0.16) 100%);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    transition: all 0.25s ease;
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 160px;
+        height: 160px;
+    }
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 76px;
+        height: 76px;
+    }
+}
+
+.nodeLabel {
+    font-family: fonts.$playfair-display, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 24px;
+    color: colors.$white;
+    text-align: center;
+    margin: 0;
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 22px;
+        line-height: 28px;
+    }
+}

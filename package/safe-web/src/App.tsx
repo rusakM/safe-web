@@ -63,6 +63,11 @@ function App() {
                         : <Navigate to={constantsUrls.LandingPage.main} replace={true} />}
                         path={constantsUrls.Main.game}
                     />
+                    <Route element={checkCurrentUser(currentUser)
+                        ? <Course/>
+                        : <Navigate to={constantsUrls.LandingPage.main} replace={true} />}
+                        path={constantsUrls.Main.activeCourse}
+                    />
                 </Routes>
             </RootContainer>
         </div>

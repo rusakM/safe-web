@@ -1,0 +1,39 @@
+@use "@styles/breakpoints.scss";
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    color: colors.$white;
+    font-family: fonts.$lato, sans-serif;
+}
+
+.title {
+    font-family: fonts.$playfair-display, serif;
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.item {
+    padding: 16px;
+    background-color: colors.$grey;
+    border-radius: 8px;
+    border: 1px solid colors.$grey-border;
+
+    a {
+        color: colors.$links;
+        text-decoration: underline;
+        word-break: break-all;
+    }
+}
