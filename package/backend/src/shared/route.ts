@@ -41,10 +41,11 @@ export namespace appRoute {
                 status: '/status',
             },
             course: {
-                get: '/course/:courseId',
-                getPlayerStats: '/course/stats',
-                getPlayerCourse: '/course/:courseId/stats',
-                sendAnswer: '/course/:courseId/answer',
+                get: `${servicesPrefix.api}/course/:courseId`,
+                getAll: `${servicesPrefix.api}/course/list`,
+                getPlayerStats: `${servicesPrefix.api}/course/stats`,
+                getPlayerCourse: `${servicesPrefix.api}/course/:courseId/stats`,
+                sendAnswer: `${servicesPrefix.api}/course/:courseId/answer`,
             },
             materials: {
                 get: `${servicesPrefix.api}/materials`,

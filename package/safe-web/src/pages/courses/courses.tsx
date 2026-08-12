@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslate } from '@tolgee/react';
 
 import PageContainer from '../../page-components/page-container/page-container';
 import PrimaryContainer from '../../components/primary-container/primary-container';
+import CourseCard, { type  TCourseStatus } from '../../components/course-card/course-card';
 
 import { useDeviceType } from '../../helpers/responsiveContainers';
+import { fetchCoursesListStart, fetchCourseStatsStart } from '../../redux/course/course.actions';
+import { selectCoursesList, selectCourseStats } from '../../redux/course/course.selectors';
 
 import styles from "./courses.module.scss";
 import commonStyles from "../../styles/common.module.scss";
@@ -19,46 +24,76 @@ import OnlineThreats1 from '../../assets/courses/online_threats1.svg';
 import OnlineThreats2 from '../../assets/courses/online_threats2.svg';
 import WebSecurely from '../../assets/courses/web_securely.svg';
 import HistoryCybersecurity from '../../assets/courses/history_cybersecurity.svg';
-import CourseCard from '../../components/course-card/course-card';
 
-type TCourse = {img: string, name: string};
+type TCourse = { img: string; name: string; courseNumber: number };
 const courses: TCourse[] = [
 	{
 		img: FakeNews,
-		name: "fake-news"
+		name: "fake-news",
+		courseNumber: 1,
 	},
 	{
 		img: Cyberbullying,
-		name: "cyberbullying"
+		name: "cyberbullying",
+		courseNumber: 2,
 	},
 	{
 		img: InternetScam,
-		name: "internet-scam"
+		name: "internet-scam",
+		courseNumber: 3,
 	},
 	{
 		img: OnlineThreats1,
 		name: "online-threats1",
+		courseNumber: 4,
 	},
 	{
 		img: OnlineThreats2,
-		name: "online-threats2"
+		name: "online-threats2",
+		courseNumber: 5,
 	},
 	{
 		img: WebSecurely,
 		name: "web-securely",
+		courseNumber: 6,
 	},
 	{
 		img: HistoryCybersecurity,
-		name: "history-cybersecurity"
+		name: "history-cybersecurity",
+		courseNumber: 7,
 	}
 ];
 
 const Materials: React.FC = () => {
 	const { t } = useTranslate();
 	const { isMobile } = useDeviceType();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
+	const coursesList = useSelector(selectCoursesList);
+	const courseStats = useSelector(selectCourseStats);
 
- 
+	useEffect(() => {
+		dispatch(fetchCoursesListStart());
+		dispatch(fetchCourseStatsStart());
+	}, [dispatch]);
+
+	const handleStartCourse = (courseNumber: number) => {
+		const courseItem = coursesList?.find((item) => item.courseNumber === courseNumber);
+		const targetId = courseItem?._id || courseNumber;
+		navigate(`/course/${targetId}`);
+	};
+
+	const getCourseStatus = (courseNumber: number): TCourseStatus => {
+		const courseItem = coursesList?.find((item) => item.courseNumber === courseNumber);
+		const stat = courseStats?.find(
+			(s) => (courseItem && s.courseId === courseItem._id)
+		);
+		if (stat?.isFinished) return "completed";
+		if (stat) return "pending";
+		return "not-started";
+	};
+
 	return (
 		<PageContainer>
 			<PrimaryContainer direction="column" additionalClassess={commonStyles.padding1em}>
@@ -88,8 +123,8 @@ const Materials: React.FC = () => {
 							header={t(`landing-page.carousel.${course.name}`)}
 							description={t(`landing-page.carousel.${course.name}.description`)}
 							picture={course.img}
-							start={() => console.log(`Start course ${course.name}`)}
-							status="not-started"
+							start={() => handleStartCourse(course.courseNumber)}
+							status={getCourseStatus(course.courseNumber)}
 						/>
 					))
 				}

@@ -4,6 +4,11 @@ import type { IStore } from "../store.types";
 
 const selectCourse = (state: IStore): ICourseState => state.course;
 
+export const selectCoursesList = createSelector(
+    [selectCourse],
+    (course) => course.coursesList
+);
+
 export const selectCurrentCourse = createSelector(
     [selectCourse],
     (course) => course.currentCourse

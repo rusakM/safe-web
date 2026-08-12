@@ -7,10 +7,11 @@ export const Footer = {
 };
 
 export const Course = {
-    get: (courseId: string) => `/course/${courseId}`,
-    getPlayerCourse: (courseId: string) => `/course/${courseId}/stats`,
-    getPlayerStats: "/course/stats",
-    sendAnswer: (courseId: string) => `/course/${courseId}/answer`,
+    get: (courseId: string) => `/api/course/${courseId}`,
+    getAll: "/api/course/list",
+    getPlayerCourse: (courseId: string) => `/api/course/${courseId}/stats`,
+    getPlayerStats: "/api/course/stats",
+    sendAnswer: (courseId: string) => `/api/course/${courseId}/answer`,
 };
 
 export const LandingPage = {

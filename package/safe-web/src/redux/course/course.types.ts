@@ -1,6 +1,9 @@
-import type { ICourse, IPlayerCourse, ICourseStats } from "../../types/course";
+import type { ICourse, IPlayerCourse, ICourseStats, ICourseListItem } from "../../types/course";
 
 export const CourseActionTypes = {
+    FETCH_COURSES_LIST_START: "FETCH_COURSES_LIST_START",
+    FETCH_COURSES_LIST_SUCCESS: "FETCH_COURSES_LIST_SUCCESS",
+    FETCH_COURSES_LIST_FAILURE: "FETCH_COURSES_LIST_FAILURE",
     FETCH_COURSE_START: "FETCH_COURSE_START",
     FETCH_COURSE_SUCCESS: "FETCH_COURSE_SUCCESS",
     FETCH_COURSE_FAILURE: "FETCH_COURSE_FAILURE",
@@ -16,11 +19,14 @@ export const CourseActionTypes = {
 };
 
 export interface ICourseState {
+    coursesList: ICourseListItem[] | null;
     courseStats: ICourseStats[] | null;
     currentCourse: ICourse | null;
+    fetchingCoursesListError: string | null;
     fetchingCourseError: string | null;
     fetchingPlayerCourseError: string | null;
     fetchingStatsError: string | null;
+    isFetchingCoursesList: boolean;
     isFetchingCourse: boolean;
     isFetchingPlayerCourse: boolean;
     isFetchingStats: boolean;

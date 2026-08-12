@@ -6,6 +6,12 @@ import { courseService, loggerService, playerCourseService } from '../services';
 import { validateSendAnswer } from '../middlewares/validators/course';
 import { useRequestTime } from '../middlewares/requestTime';
 
+async function getCourses(req: Request, res: Response) {
+    const courses = (await courseService.DB.Get.all()) ?? [];
+    const list = courses.map(({ _id, courseNumber }) => ({ _id, courseNumber }));
+    return appResponse.prepareJsonResponse(res, list);
+}
+
 async function getCourse(req: Request, res: Response) {
     const courseId = req.params.courseId?.toString();
     const course = await courseService.DB.Find.byId(courseId);
@@ -55,6 +61,8 @@ async function sendAnswer(req: Request, res: Response) {
 }
 
 export default function setup(router: Router) {
+    router.get(appRoute.getMap().course.getAll, security.validateAuthenticatedRequest, getCourses);
+
     router.get(appRoute.getMap().course.getPlayerStats, security.validateAuthenticatedRequest, getCoursesStats);
 
     router.get(appRoute.getMap().course.get, security.validateAuthenticatedRequest, getCourse);

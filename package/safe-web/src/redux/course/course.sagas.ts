@@ -4,6 +4,8 @@ import { CourseActionTypes } from "./course.types";
 import { constantsUrls } from "../../helpers/constants";
 import * as Api from "../../api/index";
 import {
+    fetchCoursesListFailure,
+    fetchCoursesListSuccess,
     fetchCourseFailure,
     fetchCourseSuccess,
     fetchCourseStatsFailure,
@@ -13,12 +15,23 @@ import {
     sendAnswerFailure,
     sendAnswerSuccess,
 } from "./course.actions";
-import type { ICourse, IPlayerCourse, ICourseStats, ISendAnswerPayload } from "../../types/course";
+import type { ICourse, IPlayerCourse, ICourseStats, ISendAnswerPayload, ICourseListItem } from "../../types/course";
 
+const fetchCoursesListStart = createAction(CourseActionTypes.FETCH_COURSES_LIST_START);
 const fetchCourseStart = createAction<string>(CourseActionTypes.FETCH_COURSE_START);
 const fetchCourseStatsStart = createAction(CourseActionTypes.FETCH_COURSE_STATS_START);
 const fetchPlayerCourseStart = createAction<string>(CourseActionTypes.FETCH_PLAYER_COURSE_START);
 const sendAnswerStart = createAction<ISendAnswerPayload>(CourseActionTypes.SEND_ANSWER_START);
+
+function* fetchCoursesList() {
+    try {
+        const coursesList: ICourseListItem[] = yield call(Api.getData, constantsUrls.Course.getAll);
+        yield put(fetchCoursesListSuccess(coursesList));
+    } catch (error) {
+        // @ts-ignore
+        yield put(fetchCoursesListFailure(error?.message || error?.name));
+    }
+}
 
 function* fetchCourse({ payload }: { payload: string }) {
     try {
@@ -66,6 +79,10 @@ function* sendAnswer({ payload }: { payload: ISendAnswerPayload }) {
     }
 }
 
+function* onFetchCoursesListStart(): Generator {
+    yield takeLatest(fetchCoursesListStart, fetchCoursesList);
+}
+
 function* onFetchCourseStart(): Generator {
     yield (takeLatest as any)(fetchCourseStart, fetchCourse);
 }
@@ -84,6 +101,7 @@ function* onSendAnswerStart(): Generator {
 
 export function* courseSagas() {
     yield all([
+        call(onFetchCoursesListStart),
         call(onFetchCourseStart),
         call(onFetchCourseStatsStart),
         call(onFetchPlayerCourseStart),

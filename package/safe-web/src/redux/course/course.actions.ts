@@ -1,5 +1,19 @@
 import { CourseActionTypes } from "./course.types";
-import type { ICourse, IPlayerCourse, ICourseStats, ISendAnswerPayload } from "../../types/course";
+import type { ICourse, IPlayerCourse, ICourseStats, ISendAnswerPayload, ICourseListItem } from "../../types/course";
+
+export const fetchCoursesListStart = () => ({
+    type: CourseActionTypes.FETCH_COURSES_LIST_START,
+});
+
+export const fetchCoursesListSuccess = (payload: ICourseListItem[]) => ({
+    type: CourseActionTypes.FETCH_COURSES_LIST_SUCCESS,
+    payload,
+});
+
+export const fetchCoursesListFailure = (error: string) => ({
+    type: CourseActionTypes.FETCH_COURSES_LIST_FAILURE,
+    payload: error,
+});
 
 export const fetchCourseStart = (courseId: string) => ({
     type: CourseActionTypes.FETCH_COURSE_START,

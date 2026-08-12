@@ -28,6 +28,11 @@ export interface IBibliography {
     url?: string;
 }
 
+export interface ICourseListItem {
+    _id: string;
+    courseNumber: number;
+}
+
 export interface ICourse {
     _id?: string;
     bibliography?: IBibliography[];

@@ -1,13 +1,16 @@
 import type { UnknownAction } from "@reduxjs/toolkit";
 import { CourseActionTypes, type ICourseState } from "./course.types";
-import type { ICourse, IPlayerCourse, ICourseStats } from "../../types/course";
+import type { ICourse, IPlayerCourse, ICourseStats, ICourseListItem } from "../../types/course";
 
 const INITIAL_STATE: ICourseState = {
+    coursesList: null,
     courseStats: null,
     currentCourse: null,
+    fetchingCoursesListError: null,
     fetchingCourseError: null,
     fetchingPlayerCourseError: null,
     fetchingStatsError: null,
+    isFetchingCoursesList: false,
     isFetchingCourse: false,
     isFetchingPlayerCourse: false,
     isFetchingStats: false,
@@ -18,6 +21,25 @@ const INITIAL_STATE: ICourseState = {
 
 const courseReducer = (state: ICourseState = INITIAL_STATE, action: UnknownAction): ICourseState => {
     switch (action.type) {
+        case CourseActionTypes.FETCH_COURSES_LIST_START:
+            return {
+                ...state,
+                fetchingCoursesListError: null,
+                isFetchingCoursesList: true,
+            };
+        case CourseActionTypes.FETCH_COURSES_LIST_SUCCESS:
+            return {
+                ...state,
+                coursesList: action.payload as ICourseListItem[],
+                isFetchingCoursesList: false,
+            };
+        case CourseActionTypes.FETCH_COURSES_LIST_FAILURE:
+            return {
+                ...state,
+                fetchingCoursesListError: action.payload as string,
+                isFetchingCoursesList: false,
+            };
+
         case CourseActionTypes.FETCH_COURSE_START:
             return {
                 ...state,

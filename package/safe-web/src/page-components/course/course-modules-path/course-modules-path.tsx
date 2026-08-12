@@ -51,20 +51,26 @@ const CourseModulesPath: React.FC<CourseModulesPathProps> = ({
         })
     );
 
+    const firstRow = sectionNodes.slice(0, 4);
+    const secondRow = sectionNodes.slice(4, 7);
+
+    const renderNode = (node: (typeof sectionNodes)[0]) => (
+        <div
+            key={`node-${node.id}`}
+            className={styles.nodeItem}
+            onClick={() => onSelectSection && onSelectSection(node.id)}
+        >
+            <div className={styles.hexagonWrapper}>
+                <img src={node.icon} alt={`Module Section ${node.id + 1}`} className={styles.icon} />
+            </div>
+            <p className={styles.nodeLabel}>{t(node.translationKey)}</p>
+        </div>
+    );
+
     return (
         <div className={styles.container}>
-            {sectionNodes.map((node) => (
-                <div
-                    key={`node-${node.id}`}
-                    className={styles.nodeItem}
-                    onClick={() => onSelectSection && onSelectSection(node.id)}
-                >
-                    <div className={styles.hexagonWrapper}>
-                        <img src={node.icon} alt={`Module Section ${node.id + 1}`} className={styles.icon} />
-                    </div>
-                    <p className={styles.nodeLabel}>{t(node.translationKey)}</p>
-                </div>
-            ))}
+            <div className={styles.row}>{firstRow.map(renderNode)}</div>
+            <div className={styles.row}>{secondRow.map(renderNode)}</div>
         </div>
     );
 };
