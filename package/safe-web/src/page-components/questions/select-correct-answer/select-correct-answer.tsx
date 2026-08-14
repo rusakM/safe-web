@@ -11,10 +11,25 @@ const SelectCorrectAnswer: React.FC<IQuestionComponentProps> = ({
 }) => {
     const { t } = useTranslate();
     const answers = question.answers || [];
+    const mediaList = question.media || [];
 
     return (
         <div className={styles.questionContainer}>
             <p className={styles.questionTitle}>{t(question.question || "")}</p>
+            {mediaList.length > 0 && (
+                <div className={styles.mediaContainer}>
+                    {mediaList.map((item, idx) => (
+                        item.url && (
+                            <img
+                                key={`question-media-${idx}`}
+                                src={item.url}
+                                alt={item.name || `Question Media ${idx + 1}`}
+                                className={styles.questionImage}
+                            />
+                        )
+                    ))}
+                </div>
+            )}
             <div className={styles.optionsGrid}>
                 {answers.map((ans, idx) => {
                     const isSelected = playerResponse === ans;

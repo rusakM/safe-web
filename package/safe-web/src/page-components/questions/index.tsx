@@ -2,6 +2,7 @@ import React from "react";
 import { TYPES_ENUM } from "../../helpers/constants/course";
 import type { IQuestionComponentProps } from "./questions.types";
 
+import ContentText from "./content-text/content-text";
 import SingleChoose from "./single-choose/single-choose";
 import SelectCorrectAnswer from "./select-correct-answer/select-correct-answer";
 import MultiChoose from "./multi-choose/multi-choose";
@@ -13,6 +14,8 @@ const QuestionRenderer: React.FC<IQuestionComponentProps> = (props) => {
     const type = question.type as TYPES_ENUM;
 
     switch (type) {
+        case TYPES_ENUM.CONTENT_TEXT:
+            return <ContentText {...props} />;
         case TYPES_ENUM.SINGLE_CHOOSE:
             return <SingleChoose {...props} />;
         case TYPES_ENUM.SELECT_CORRECT_ANSWER:

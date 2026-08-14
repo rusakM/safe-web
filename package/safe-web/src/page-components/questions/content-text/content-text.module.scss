@@ -1,0 +1,94 @@
+@use "@styles/colors.scss";
+@use "@styles/fonts.scss";
+@use "@styles/breakpoints.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    max-height: 65vh;
+    padding: 16px 24px;
+    box-sizing: border-box;
+    gap: 24px;
+
+    @media (min-width: breakpoints.$desktop) {
+        &.hasMedia {
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 32px;
+        }
+    }
+}
+
+.mediaSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+
+    @media (min-width: breakpoints.$desktop) {
+        width: 40%;
+        flex: 0 0 40%;
+        order: 2;
+    }
+}
+
+.mediaItem {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.image {
+    max-width: 100%;
+    max-height: 50vh;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.textSection {
+    flex: 1;
+    width: 100%;
+    max-height: 62vh;
+    overflow-y: auto;
+
+    /* Custom scrollbar for dark theme */
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 4px;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    }
+}
+
+.textContent {
+    font-family: fonts.$lato, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: colors.$white;
+    text-align: left;
+    margin: 0;
+    white-space: pre-line;
+
+    @media (min-width: breakpoints.$desktop) {
+        font-size: 20px;
+        line-height: 28px;
+    }
+}

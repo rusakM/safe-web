@@ -56,9 +56,10 @@ const Course: React.FC<CourseProps> = ({ children, overrideViewMode }) => {
         }
         if (activeSectionIndex > 0) {
             setActiveSectionIndex((prev) => prev - 1);
-        } else if (activeModuleIndex > 0) {
-            setActiveModuleIndex((prev) => prev - 1);
-            setActiveSectionIndex(0);
+        } else if (activeModuleIndex > 0 && viewMode === "question") {
+            setViewMode("modules");
+        } else if (viewMode !== "modules") {
+            setViewMode("modules");
         } else {
             navigate("/courses");
         }
@@ -69,9 +70,14 @@ const Course: React.FC<CourseProps> = ({ children, overrideViewMode }) => {
             setViewMode("modules");
             return;
         }
-        if (activeSectionIndex < 6) {
-            setActiveSectionIndex((prev) => prev + 1);
+        if (viewMode === "modules") {
             setViewMode("question");
+            return;
+        }
+        const currentQuestions = course?.modules?.[activeModuleIndex]?.questions || [];
+        const totalQuestions = currentQuestions.length || 1;
+        if (activeSectionIndex < totalQuestions - 1) {
+            setActiveSectionIndex((prev) => prev + 1);
         } else {
             const totalModules = course?.modules?.length || 1;
             if (activeModuleIndex < totalModules - 1) {
@@ -82,14 +88,15 @@ const Course: React.FC<CourseProps> = ({ children, overrideViewMode }) => {
                 navigate("/courses");
             }
         }
-    }, [viewMode, activeSectionIndex, activeModuleIndex, course?.modules?.length, navigate]);
+    }, [viewMode, activeSectionIndex, activeModuleIndex, course?.modules, navigate]);
 
     const handleOpenBibliography = useCallback(() => {
         setViewMode("bibliography");
     }, []);
 
-    const handleSelectSection = useCallback((sectionIndex: number) => {
-        setActiveSectionIndex(sectionIndex);
+    const handleSelectSection = useCallback((moduleIndex: number) => {
+        setActiveModuleIndex(moduleIndex);
+        setActiveSectionIndex(0);
         setViewMode("question");
     }, []);
 

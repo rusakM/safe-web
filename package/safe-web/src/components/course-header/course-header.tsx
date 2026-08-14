@@ -24,19 +24,19 @@ const CourseHeader: React.FC<ICourseHeader> = ({ showBibliography = false, secti
         <PrimaryContainer direction="column" additionalClassess={styles.courseHeaderOutline}>
             <PrimaryContainer direction="column" additionalClassess={styles.courseHeaderContainer}>
                 <PrimaryContainer direction="row" additionalClassess={styles.controlsRow}>
-                    <span className={styles.courseButton}>
-                        <img src={ArrowBack} alt="back" onClick={goBack} />
-                        {moduleDescription}
+                    <span className={styles.courseButton} onClick={goBack}>
+                        <img src={ArrowBack} alt="back" />
+                        {!showBibliography && moduleDescription}
                     </span>
                     
                         {!showBibliography ? (
-                            <span className={styles.courseButton}>
+                            <span className={styles.courseButton} onClick={goNext}>
                                 {t(`active.course.hub.next.page.button`)}
-                                <img src={ArrowNext} alt="next" onClick={goNext} />
+                                <img src={ArrowNext} alt="next" />
                                 </span>
                         ) : (
-                            <span className={styles.courseButton}>
-                                <img src={Bibliography} alt="bibliography" onClick={openBibliography} />
+                            <span className={styles.courseButton} onClick={openBibliography}>
+                                <img src={Bibliography} alt="bibliography" />
                                 {t(`active.course.hub.bibliography.button`)}
                                 </span>
                         )}
