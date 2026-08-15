@@ -141,8 +141,8 @@ const LandingPage: React.FC = () => {
                 </PrimaryContainer>
             </PrimaryContainer>
             {/* sixth */}
-            <PrimaryContainer direction="column">
-                <PrimaryContainer direction="column" width="desktopFit" height="allScreenHeight" contentAlignment="center">
+            <PrimaryContainer>
+                <PrimaryContainer width="desktopFit" height="allScreenHeight" contentAlignment="center">
                     <p className={`${commonStyles.basicHeader2} ${commonStyles.leftSideText} ${commonStyles.noHorizontalPadding}`}>{t("landing-page.header7")}</p>
                     <div className={styles.partnersGrid} >
                         {partners.map((logo) => (

@@ -13,6 +13,11 @@ const INITIAL_STATE: IUserState = {
 const userReducer = (state: IUserState = INITIAL_STATE, action: UnknownAction): IUserState => {
     switch (action.type) {
         case UserActionTypes.CHECK_EMAIL_START:
+            return {
+                ...state,
+                isFetching: true,
+                signInEmail: action.payload as string,
+            };
         case UserActionTypes.SIGN_UP_START:
         case UserActionTypes.USER_EDIT_START:
         case UserActionTypes.VERIFY_CODE_START:

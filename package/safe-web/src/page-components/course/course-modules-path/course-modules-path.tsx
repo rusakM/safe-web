@@ -69,8 +69,8 @@ const CourseModulesPath: React.FC<CourseModulesPathProps> = ({
 
     return (
         <div className={styles.container}>
-            <div className={styles.row}>{firstRow.map(renderNode)}</div>
-            <div className={styles.row}>{secondRow.map(renderNode)}</div>
+            <div className={styles.modulesRow}>{firstRow.map(renderNode)}</div>
+            <div className={styles.modulesRow}>{secondRow.map(renderNode)}</div>
         </div>
     );
 };

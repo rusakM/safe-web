@@ -60,7 +60,7 @@ const Confirm: React.FC = () => {
         }
     }, [nextResendCodeInSeconds, setNextResendCodeInSeconds]);
 
-    const handleSubmit = async (event?: MouseEvent) => {
+    const handleSubmit = async (event?: MouseEvent | React.KeyboardEvent) => {
         event?.preventDefault();
         setLoginStarted(true);
         dispatch(verifyCodeStart({email: loginEmail, verificationCode}));
@@ -103,6 +103,11 @@ const Confirm: React.FC = () => {
                     <TextInput
                         name="verificationCode"
                         onChange={handleInputCode}
+                        onKeyDown={(e) => {
+                            if (e?.key === "Enter") {
+                                handleSubmit(e);
+                            }
+                        }}
                         placeholder={t("signin.confirm.input-placeholder")}
                         type="text"
                         value={verificationCode}
@@ -119,7 +124,7 @@ const Confirm: React.FC = () => {
                 </PrimaryContainer>
                 <div className={styles.errorDescriptionContainer}>
                     <p className={commonStyles.redText}>
-                        {loginError && <p>{t(ERRORS_TRANSLATIONS_MAP[loginError])}</p>}
+                        {loginError && <p>{t(ERRORS_TRANSLATIONS_MAP?.[loginError] ?? loginError)}</p>}
                     </p>
 
                 </div>
