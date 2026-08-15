@@ -1,4 +1,4 @@
-import React, { useState, useEffect, type MouseEvent, type ChangeEvent } from "react";
+import React, { useState, useEffect, type ChangeEvent, type MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "@tolgee/react";
 
@@ -43,7 +43,7 @@ const SignUp: React.FC = () => {
     const loginError = useSelector(selectUserError);
     const isLoadingData = useSelector(selectIsLoadingData);
 
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(loginEmail || "");
     const [confirm, setConfirm] = useState(false);
     const [formError, setFormError] = useState({
         confirm: false,
@@ -60,9 +60,9 @@ const SignUp: React.FC = () => {
         } else if (!loginError && loginStarted && loginEmail) {
             navigate(constantsUrls.LandingPage.confirm);
         }
-    }, [navigate, loginError, loginStarted, loginEmail, email]);
+    }, [navigate, loginError, loginStarted, loginEmail, email, dispatch]);
 
-    const handleSubmit = async (event?: MouseEvent) => {
+    const handleSubmit = async (event?: MouseEvent<HTMLButtonElement>) => {
         event?.preventDefault();
 
         const validateError = !!(UserValidators.email.validate(email)?.error) || null;

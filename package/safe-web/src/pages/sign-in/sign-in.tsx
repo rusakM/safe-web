@@ -17,7 +17,7 @@ import {
     selectUserError,
 } from "../../redux/user/user.selectors";
 
-import { ERRORS_ENUM } from "../../api/user.api";
+import { ERRORS_ENUM, ERRORS_TRANSLATIONS_MAP } from "../../api/user.api";
 
 import commonStyles from "../../styles/common.module.scss";
 import containerStyles from "../../styles/containers.module.scss";
@@ -51,8 +51,9 @@ const SignIn: React.FC = () => {
         }
     }, [navigate, loginError, loginStarted, loginEmail]);
 
-    const handleSubmit = (event?: MouseEvent) => {
+    const handleSubmit = (event?: MouseEvent | React.KeyboardEvent) => {
         event?.preventDefault();
+        if (!email) return;
         setLoginStarted(true);
         dispatch(checkEmailStart(email));
     };
@@ -77,6 +78,11 @@ const SignIn: React.FC = () => {
                     <TextInput
                         name="email"
                         onChange={handleInputText(setEmail)}
+                        onKeyDown={(e) => {
+                            if (e?.key === "Enter") {
+                                handleSubmit(e);
+                            }
+                        }}
                         placeholder="E-mail"
                         type="email"
                         value={email}
@@ -88,7 +94,7 @@ const SignIn: React.FC = () => {
                         {t("main.register-question")}
                     </p>
                     {isLoadingData && <Spinner />}
-                    {loginError && <p>{loginError}</p>}
+                    {loginError && <p>{t(ERRORS_TRANSLATIONS_MAP?.[loginError] ?? loginError)}</p>}
                 </PrimaryContainer>
             </PrimaryContainer>
             <PrimaryContainer

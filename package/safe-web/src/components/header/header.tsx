@@ -94,12 +94,12 @@ const Header: React.FC = () => {
     }, [handleClickOutsideMenu, isHeaderMenuHidden, isLanguagesMenuHidden, isUserMenuHidden]);
 
     const languages: [key: constantsTranslations.TLocale, value: string][] = [
-        ["el", t("header.languages.greek")],
+        ["nl-BE", t("header.languages.belgian")],
         ["en", t("header.languages.english")],
-        ["da", t("header.languages.danish")],
         ["it", t("header.languages.italian")],
         ["pt", t("header.languages.portuguese")],
         ["pl", t("header.languages.polish")],
+        ["sl", t("header.languages.slovenian")],
         ["sv", t("header.languages.swedish")],
     ];
 
@@ -226,7 +226,7 @@ const Header: React.FC = () => {
             </div>
             <DropdownMenu
                 isOpen={!isLanguagesMenuHidden}
-                items={languages}
+                items={languages.map(([key, value]) => [key as string, capitalizeFirstLetter(value)])}
                 onItemSelect={(item) => selectLanguage(item as constantsTranslations.TLocale)}
                 reference={languagesMenuRef}
             />
