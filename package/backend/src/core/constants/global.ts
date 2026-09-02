@@ -9,12 +9,12 @@ export namespace App {
     export const VERIFICATION_CODE_EXPIRED_MINUTES = 5;
 
     export enum USER_INTERFACE_LANGUAGES {
-        dk = 'dk',
-        el = 'el',
         en = 'en',
+        fr = 'fr',
         it = 'it',
-        nb = 'pt',
         pl = 'pl',
+        pt = 'pt',
+        sl = 'sl',
         sv = 'sv',
     }
 }

@@ -1,9 +1,9 @@
 import { UserRoleEnum } from "../../types/user";
-export type TLocale = "nl-BE" | "en" | "it" | "pl" | "pt" | "sl" | "sv";
+export type TLocale = "en" | "fr" | "it" | "pl" | "pt" | "sl" | "sv";
 
 export enum LocalesEnum {
-    'nl-BE' = 'nl-BE',
     en = 'en',
+    fr = 'fr',
     it = 'it',
     pl = 'pl',
     pt = 'pt',
