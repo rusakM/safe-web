@@ -15,6 +15,7 @@ import {
 import {
     fetchCourseStart,
     fetchPlayerCourseStart,
+    sendAnswerStart,
 } from "../../redux/course/course.actions";
 
 import styles from "./course.module.scss";
@@ -93,7 +94,25 @@ const Course: React.FC<CourseProps> = ({ children, overrideViewMode }) => {
         setViewMode("question");
     }, []);
 
+    const currentCourseId = course?._id;
+    const playerCourseId = playerCourse?._id;
+
+    const handleSelectAnswer = useCallback((response: string) => {
+        if (currentCourseId) {
+            dispatch(sendAnswerStart({
+                courseId: currentCourseId,
+                moduleId: activeModuleIndex + 1,
+                questionId: activeSectionIndex + 1,
+                response,
+                playerCourseId,
+            }));
+        }
+    }, [dispatch, currentCourseId, activeModuleIndex, activeSectionIndex, playerCourseId]);
+
     const currentQuestion = course?.modules?.[activeModuleIndex]?.questions?.[activeSectionIndex];
+    const existingScore = playerCourse?.questionScores?.find(
+        (qs) => qs.module === activeModuleIndex + 1 && qs.question === activeSectionIndex + 1
+    );
 
     const renderContent = () => {
         if (children) {
@@ -110,6 +129,8 @@ const Course: React.FC<CourseProps> = ({ children, overrideViewMode }) => {
                         <QuestionRenderer
                             question={currentQuestion}
                             showAnswer={false}
+                            playerResponse={existingScore?.response}
+                            onSelectAnswer={handleSelectAnswer}
                         />
                     );
                 }

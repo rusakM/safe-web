@@ -5,4 +5,5 @@ export interface IQuestionComponentProps {
     showAnswer: boolean;
     playerResponse?: string;
     isAnswerCorrect?: boolean;
+    onSelectAnswer?: (response: string) => void;
 }
