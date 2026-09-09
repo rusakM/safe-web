@@ -94,6 +94,7 @@ const Header: React.FC = () => {
     }, [handleClickOutsideMenu, isHeaderMenuHidden, isLanguagesMenuHidden, isUserMenuHidden]);
 
     const languages: [key: constantsTranslations.TLocale, value: string][] = [
+        ["el", t("header.languages.greek")],
         ["en", t("header.languages.english")],
         ["fr", t("header.languages.french")],
         ["it", t("header.languages.italian")],
