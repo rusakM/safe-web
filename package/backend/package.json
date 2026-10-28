@@ -11,7 +11,8 @@
     "init": "npm install",
     "lint": "eslint ./**/*.ts --quiet",
     "refresh": "rm -rf ./node_modules ./dist ./package-lock.json && npm install",
-    "start": "npm run lint && npm run debug"
+    "start": "npm run lint && npm run debug",
+    "test": "vitest run"
   },
   "author": "Mateusz Rusak",
   "license": "ISC",
@@ -53,6 +54,7 @@
     "cross-env": "^10.1.0",
     "globals": "^17.5.0",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^5.0.5"
   }
 }
