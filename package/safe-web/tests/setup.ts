@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 if (typeof globalThis.DOMMatrix === 'undefined') {
     globalThis.DOMMatrix = class DOMMatrix {
@@ -26,3 +27,31 @@ if (typeof window !== 'undefined' && !window.matchMedia) {
         }),
     });
 }
+
+// Global mock for Tolgee i18n
+vi.mock('@tolgee/react', () => ({
+    useTranslate: () => ({
+        t: (key: string, defaultValue?: string) => defaultValue || key,
+    }),
+    useTolgee: () => ({
+        changeLanguage: vi.fn(),
+        getLanguage: () => 'en',
+    }),
+    TolgeeProvider: ({ children }: any) => children,
+    Tolgee: () => {
+        const instance = {
+            use: () => instance,
+            init: () => instance,
+            changeLanguage: vi.fn(),
+            getLanguage: () => 'en',
+        };
+        return instance;
+    },
+    DevTools: () => ({}),
+    BackendFetch: () => ({}),
+    FormatSimple: () => ({}),
+}));
+
+vi.mock('@tolgee/format-icu', () => ({
+    FormatIcu: () => ({}),
+}));
