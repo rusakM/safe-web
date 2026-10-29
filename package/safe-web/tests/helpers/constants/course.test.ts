@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { TYPES_ENUM, PLAYABLE_QUESTION_TYPES, QUESTION_MEDIA_TYPES_ENUM } from '../../../src/helpers/constants/course';
+import { TYPES_ENUM, PLAYABLE_QUESTION_TYPES, QUESTION_MEDIA_TYPES_ENUM, STAGE_ENUM, COURSE_SECTIONS_CONFIG } from '../../../src/helpers/constants/course';
 
 describe('Constants Course', () => {
     it('TYPES_ENUM should contain all question and content types', () => {
@@ -22,5 +22,11 @@ describe('Constants Course', () => {
     it('QUESTION_MEDIA_TYPES_ENUM should include PHOTO and VIDEO', () => {
         expect(QUESTION_MEDIA_TYPES_ENUM.PHOTO).toBe('PHOTO');
         expect(QUESTION_MEDIA_TYPES_ENUM.VIDEO).toBe('VIDEO');
+    });
+
+    it('STAGE_ENUM and COURSE_SECTIONS_CONFIG should configure all 7 stages correctly', () => {
+        expect(COURSE_SECTIONS_CONFIG).toHaveLength(7);
+        expect(COURSE_SECTIONS_CONFIG[0].stage).toBe(STAGE_ENUM.INTRODUCTION);
+        expect(COURSE_SECTIONS_CONFIG[6].stage).toBe(STAGE_ENUM.SUMMARIZE_MODULE);
     });
 });

@@ -9,48 +9,66 @@ import ArrowBack from "../../assets/icons/game_arrow_back.svg";
 import Bibliography from "../../assets/icons/bibliography.svg";
 
 interface ICourseHeader {
+    customTitle?: string;
     goBack?: () => void;
     goNext?: () => void;
     module: number;
     openBibliography?: () => void;
     section: number;
     showBibliography?: boolean;
+    showNextButton?: boolean;
 }
 
-const CourseHeader: React.FC<ICourseHeader> = ({ showBibliography = false, section, module, goBack, goNext, openBibliography }) => {
+const CourseHeader: React.FC<ICourseHeader> = ({
+    customTitle,
+    goBack,
+    goNext,
+    module,
+    openBibliography,
+    section,
+    showBibliography = false,
+    showNextButton,
+}) => {
     const { t } = useTranslate();
-    const moduleDescription = module > 0 ? t(`active.course.navigation.module.${module}`) + ", " + t(`active.course.navigation.section.${section}`) : ""; 
+
+    const moduleLabel = module > 0
+        ? `${t(`active.course.navigation.module.${module}`).toUpperCase()}, ${t(`active.course.navigation.section.${section}`).toUpperCase()}`
+        : "";
+
+    const titleText = customTitle || (module > 0 ? t(`active.course.hub.module.title.${module}`) : "");
+
+    const shouldShowNext = typeof showNextButton === "boolean" ? showNextButton : !showBibliography;
+
     return (
         <PrimaryContainer direction="column" additionalClassess={styles.courseHeaderOutline}>
-            <PrimaryContainer direction="column" additionalClassess={styles.courseHeaderContainer}>
-                <PrimaryContainer direction="row" additionalClassess={styles.controlsRow}>
-                    <span className={styles.courseButton}>
-                        <img src={ArrowBack} alt="back" onClick={goBack} />
-                        {moduleDescription}
-                    </span>
-                    
-                        {!showBibliography ? (
-                            <span className={styles.courseButton}>
-                                {t(`active.course.hub.next.page.button`)}
-                                <img src={ArrowNext} alt="next" onClick={goNext} />
-                                </span>
-                        ) : (
-                            <span className={styles.courseButton}>
-                                <img src={Bibliography} alt="bibliography" onClick={openBibliography} />
-                                {t(`active.course.hub.bibliography.button`)}
-                                </span>
-                        )}
-                </PrimaryContainer>
-                <PrimaryContainer direction="row">
-                    {module > 0 && (
-                        <span className={styles.courseTitle}>
-                            {t(`active.course.hub.module.title.${module}`)}
-                        </span>
+            <div className={styles.courseHeaderContainer}>
+                <div className={styles.controlsRow}>
+                    <button className={styles.courseButton} onClick={goBack} type="button">
+                        <img src={ArrowBack} alt="back" />
+                        <span>{moduleLabel}</span>
+                    </button>
+
+                    {shouldShowNext ? (
+                        <button className={styles.courseButton} onClick={goNext} type="button">
+                            <span>{t("active.course.hub.next.page.button", "Dalej")}</span>
+                            <img src={ArrowNext} alt="next" />
+                        </button>
+                    ) : (
+                        <button className={styles.courseButton} onClick={openBibliography} type="button">
+                            <img src={Bibliography} alt="bibliography" />
+                            <span>{t("active.course.hub.bibliography.button", "Bibliografia")}</span>
+                        </button>
                     )}
-                </PrimaryContainer>
-            </PrimaryContainer>
+                </div>
+
+                {titleText && (
+                    <div className={styles.titleRow}>
+                        <h1 className={styles.courseTitle}>{titleText}</h1>
+                    </div>
+                )}
+            </div>
         </PrimaryContainer>
     );
 };
 
-export default CourseHeader;    
+export default CourseHeader;

@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslate } from "@tolgee/react";
 import type { ICourse } from "../../../types/course";
+import { COURSE_SECTIONS_CONFIG } from "../../../helpers/constants/course";
 
 import styles from "./course-modules-path.module.scss";
 
@@ -22,16 +23,6 @@ const MODULE_ICONS = [
     Module7Icon,
 ];
 
-const DEFAULT_SECTION_KEYS = [
-    "active.course.hub.module.title.1",
-    "active.course.hub.module.title.2",
-    "active.course.hub.module.title.3",
-    "active.course.hub.module.title.4",
-    "active.course.hub.module.title.5",
-    "active.course.hub.module.title.6",
-    "active.course.hub.module.title.7",
-];
-
 interface CourseModulesPathProps {
     course?: ICourse | null;
     onSelectSection?: (sectionIndex: number) => void;
@@ -43,13 +34,16 @@ const CourseModulesPath: React.FC<CourseModulesPathProps> = ({
 }) => {
     const { t } = useTranslate();
 
-    const sectionNodes = Array.from({ length: 7 }, (_, idx) => 
-        ({
+    const sectionNodes = COURSE_SECTIONS_CONFIG.map((config, idx) => {
+        const customTitle = course?.modules?.[idx]?.moduleNameTranslation;
+        const label = customTitle ? t(customTitle) : t(config.translationKey, config.defaultTitle);
+
+        return {
             id: idx,
             icon: MODULE_ICONS[idx % MODULE_ICONS.length],
-            translationKey: course?.modules?.[idx]?.moduleNameTranslation ?? DEFAULT_SECTION_KEYS[idx]
-        })
-    );
+            label,
+        };
+    });
 
     const firstRow = sectionNodes.slice(0, 4);
     const secondRow = sectionNodes.slice(4, 7);
@@ -59,18 +53,56 @@ const CourseModulesPath: React.FC<CourseModulesPathProps> = ({
             key={`node-${node.id}`}
             className={styles.nodeItem}
             onClick={() => onSelectSection && onSelectSection(node.id)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    onSelectSection && onSelectSection(node.id);
+                }
+            }}
         >
             <div className={styles.hexagonWrapper}>
-                <img src={node.icon} alt={`Module Section ${node.id + 1}`} className={styles.icon} />
+                <svg
+                    className={styles.hexagonSvg}
+                    viewBox="0 0 100 100"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <defs>
+                        <linearGradient id={`hexFill-${node.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="rgba(231, 231, 231, 0.24)" />
+                            <stop offset="100%" stopColor="rgba(231, 231, 231, 0.16)" />
+                        </linearGradient>
+                        <linearGradient id={`hexStroke-${node.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="rgba(255, 255, 255, 0.65)" />
+                            <stop offset="50%" stopColor="rgba(210, 210, 210, 0.35)" />
+                            <stop offset="100%" stopColor="rgba(255, 255, 255, 0.55)" />
+                        </linearGradient>
+                    </defs>
+                    <polygon
+                        points="50,3 97,25 97,75 50,97 3,75 3,25"
+                        fill={`url(#hexFill-${node.id})`}
+                        stroke={`url(#hexStroke-${node.id})`}
+                        strokeWidth="3.5"
+                        strokeLinejoin="round"
+                    />
+                </svg>
+                <div className={styles.iconContainer}>
+                    <img
+                        src={node.icon}
+                        alt={`Module Section ${node.id + 1}`}
+                        className={styles.icon}
+                    />
+                </div>
             </div>
-            <p className={styles.nodeLabel}>{t(node.translationKey)}</p>
+            <p className={styles.nodeLabel}>{node.label}</p>
         </div>
     );
 
     return (
         <div className={styles.container}>
-            <div className={styles.modulesRow}>{firstRow.map(renderNode)}</div>
-            <div className={styles.modulesRow}>{secondRow.map(renderNode)}</div>
+            <div className={styles.modulesRowTop}>{firstRow.map(renderNode)}</div>
+            <div className={styles.modulesRowBottom}>{secondRow.map(renderNode)}</div>
         </div>
     );
 };

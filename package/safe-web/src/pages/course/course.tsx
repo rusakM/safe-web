@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslate } from "@tolgee/react";
 
 import PrimaryContainer from "../../components/primary-container/primary-container";
 import CourseHeader from "../../components/course-header/course-header";
@@ -28,6 +29,7 @@ interface CourseProps {
 }
 
 const Course: React.FC<CourseProps> = ({ children, overrideViewMode }) => {
+    const { t } = useTranslate();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { courseId } = useParams<{ courseId: string }>();
@@ -155,12 +157,14 @@ const Course: React.FC<CourseProps> = ({ children, overrideViewMode }) => {
     return (
         <div className={styles.presenterWrapper}>
             <CourseHeader
+                customTitle={viewMode === "modules" ? t("active.course.hub.module.summary", "Podsumowanie modułu") : undefined}
                 module={activeModuleIndex + 1}
                 section={activeSectionIndex + 1}
                 goBack={handleGoBack}
                 goNext={handleGoNext}
                 openBibliography={handleOpenBibliography}
                 showBibliography={viewMode === "bibliography"}
+                showNextButton={viewMode === "question"}
             />
             <PrimaryContainer direction="column" additionalClassess={styles.contentContainer}>
                 {renderContent()}
